@@ -1,7 +1,7 @@
 <template>
   <div :class="`main-container ${isMini ? 'min-body' : 'common-body'} ${isLogin ? 'auth-body' : 'no-auth-body'}`">
 
-    <mu-drawer :open="isOpenLeftMenu" :docked="!isMini" :right="false" width="260">
+    <mu-drawer :open.sync="openLeftPart" :docked="!isMini" :right="false" width="260">
       <mu-paper :z-depth="1" class="menu-part-wrap">
         <Menu></Menu>
       </mu-paper>
@@ -36,6 +36,10 @@
     },
 
     watch: {
+      openLeftPart(v) {
+        this.$store.dispatch("setLeftMenu", v);
+      },
+
       isOpenLeftMenu(isOpen) {
         let viewPort = UtilsBase.deepCopy(this.viewPort);
         if (isOpen && !this.isMini && viewPort.left === 0) {
@@ -46,8 +50,11 @@
           viewPort.left = 0;
           this.setViewPort(viewPort);
         }
-        console.log(viewPort);
       }
+    },
+
+    created() {
+      this.openLeftPart = this.isOpenLeftMenu;
     },
 
     computed:{
@@ -62,7 +69,7 @@
 
     methods: {
       onClickBarMenu() {
-        this.$store.dispatch("toggleLeftMenu");
+        this.openLeftPart = !this.openLeftPart;
       },
 
       setViewPort(viewPort) {

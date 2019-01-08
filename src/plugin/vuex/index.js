@@ -89,6 +89,10 @@ export default new Vuex.Store({
 
     toggleLeftMenu(state) {
       state.isOpenLeftMenu = !state.isOpenLeftMenu;
+    },
+
+    setLeftMenu(state, payload) {
+      state.isOpenLeftMenu = payload;
     }
   },
 
@@ -147,6 +151,10 @@ export default new Vuex.Store({
 
     toggleLeftMenu({commit}) {
       commit("toggleLeftMenu");
+    },
+
+    setLeftMenu({commit}, payload) {
+      commit("setLeftMenu", payload);
     }
   },
 
