@@ -22,6 +22,8 @@ import './assets/iconfont/material-icons.css';
 
 import HttpClient from "./lib/http/HttpClient";
 import RouterAccess from "./RouterAccess";
+import base from "./lib/base";
+import {UtilsBase} from "./lib/utils/UtilsBase";
 
 // 设置系统数据格式
 HttpClient.setResponseDataFormat({
@@ -34,10 +36,14 @@ HttpClient.setResponseDataFormat({
 // 路由权限控制
 new RouterAccess(router);
 
+// 设置试图
+store.dispatch("setViewPort", UtilsBase.getClient());
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
+  base,
   render: h => h(App)
 });

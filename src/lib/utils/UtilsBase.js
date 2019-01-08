@@ -79,6 +79,45 @@ export class UtilsBase {
     }
     return str;
   }
+
+  /**
+   * 检测客户端机型和环境
+   * @returns {{isWx: boolean, isIos: boolean, isAndroid: boolean}}
+   */
+  static getClient() {
+    const WEI_XIN_APP_SIGN = 'microMessenger';
+    let result, userAgent;
+
+    result = {
+      width: document.documentElement.clientWidth,
+      height: document.documentElement.clientHeight,
+
+      isWx: false,
+      isWindowsPhone: false,
+      isIos: false,
+      isAndroid: false
+    };
+
+    userAgent = window.navigator.userAgent.toLowerCase();
+
+    // 判断是否为微信
+    if (userAgent.indexOf(WEI_XIN_APP_SIGN.toLocaleLowerCase()) > -1) {
+      result.isWx = true;
+    }
+
+    // 判断系统
+    if (userAgent.indexOf('android') > -1 || userAgent.indexOf('linux') > -1) {
+      //安卓手机
+      result.isAndroid = true;
+    } else if (userAgent.indexOf('iphone') > -1) {
+      //苹果手机
+      result.isIos = true;
+    } else if (userAgent.indexOf('windows phone') > -1) {
+      //winphone手机
+      result.isWindowsPhone = true;
+    }
+    return result;
+  }
 }
 
 window.UtilsBase = UtilsBase;

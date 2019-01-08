@@ -30,6 +30,10 @@
         <SkCol :span="6">
           <SKSelect multiple display-field="productChildName" value-field="productChildId" name="productChildId" label="类型"  :option-bind="selectOptionDs" init-value="2"></SKSelect>
         </SkCol>
+
+        <SkCol :span="6">
+          <SkTag name="tags" label="标签" :init-value="[2]"></SkTag>
+        </SkCol>
       </SkRow>
       <SkFixedBottom>
         <SkButtonGroup align="center">
@@ -55,6 +59,7 @@
   import SkButtonGroup from '../components/SkButtonGroup';
   import SkMoney from '../components/SkMoney';
   import SKSelect from '../components/SKSelect';
+  import SkTag from '../components/SkTag';
   import DataSet from "../lib/utils/DataSet";
   import SystemApi from "../lib/http/SystemApi";
 
@@ -70,6 +75,7 @@
       SkFixedBottom,
       SkButton,
       SkRadio,
+      SkTag,
       SKSelect,
       SkCol,
       SkRow
@@ -89,7 +95,7 @@
 
         selectOptionDs: new DataSet({
           queryUrl: SystemApi.getProductChild,
-          isAutoQuery: true
+          isAutoQuery: false
         })
       };
     },

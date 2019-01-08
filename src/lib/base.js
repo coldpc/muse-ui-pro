@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import LocalStorageApi from "./utils/LocalStorageApi";
 import CookieApi from "./utils/CookieApi";
 import MuseUIMessage from 'muse-ui-message';
@@ -14,6 +15,14 @@ const pluginConfig = {
 
 class Base {
   constructor() {
+
+  }
+
+  install(Vue){
+    Vue.prototype.$base = this;
+  }
+
+  use() {
 
   }
 
@@ -85,4 +94,6 @@ class Base {
 }
 
 
-export default new Base();
+const base = new Base();
+Vue.use(base);
+export default base;

@@ -1,10 +1,10 @@
 <template>
-  <div :class="focusClass">
+  <div :class="`${focusClass} sk-select-part`">
     <mu-select :max-height="maxHeight" @change="onChange" :multiple="multiple"
-               v-model="innerValue"
+               v-model="innerValue" :popover-class="!hasLoadOption ? 'sk-no-options-list' : '' "
                :error-text="errorText" :help-text="helpText" :disabled="disabled"
                :label="label" :label-float="labelFloat" :full-width="fullWidth" >
-      <mu-option v-for="(record) in records" :key="record.recordId" :value="getItemValue(record)"
+      <mu-option v-if="hasLoadOption" v-for="(record) in records" :key="record.recordId" :value="getItemValue(record)"
                  :label="getItemDisplay(record)"></mu-option>
     </mu-select>
 
@@ -229,5 +229,11 @@
       margin: 0px;
       font-size: 12px;
     }
+  }
+</style>
+
+<style>
+  .sk-no-options-list{
+    display: none;
   }
 </style>
