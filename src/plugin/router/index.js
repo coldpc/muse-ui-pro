@@ -4,6 +4,7 @@ Vue.use(VueRouter);
 
 //config
 let createRoutesConfig = [
+{path: "/page/channel/manager", component: resolve => require(["@/page/channel/manager"], resolve), name: "page.channel.manager"},
 {path: "/page/home", component: resolve => require(["@/page/home"], resolve), name: "page.home"},
 {path: "/page/user/login", component: resolve => require(["@/page/user/login"], resolve), name: "page.user.login"}
 ];
@@ -19,7 +20,7 @@ const router = new VueRouter({
   routes: createRoutesConfig
 });
 
-export const EnRoutesConfig = {"pageHome":"page.home","pageUserLogin":"page.user.login"};
+export const EnRoutesConfig = {"pageChannelManager":"page.channel.manager","pageHome":"page.home","pageUserLogin":"page.user.login"};
 
 export class RouterService {
 

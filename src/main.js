@@ -20,6 +20,9 @@ import './plugin/museUi';
 import './assets/main.css';
 import './assets/iconfont/material-icons.css';
 
+/************引入系统插件***************/
+import './plugin/skirt';
+
 
 import HttpClient from "./lib/http/HttpClient";
 import RouterAccess from "./RouterAccess";
@@ -44,10 +47,10 @@ class Main {
 
   constructor(router, store) {
     this.router = router;
-    this.routeAccess = new RouterAccess(this.router);
+    this.routeAccess = new RouterAccess(this.router, store);
     this.store = store;
 
-    this.initServiceFormat({
+    Main.initServiceFormat({
       errorMessageField: "errorMessage",
       codeField: "errorCode",
       normalCode: 1,
@@ -65,7 +68,7 @@ class Main {
    * @param codeField
    * @param normalCode
    */
-  initServiceFormat({dataField, errorMessageField, codeField, normalCode}) {
+  static initServiceFormat({dataField, errorMessageField, codeField, normalCode}) {
     HttpClient.setResponseDataFormat({
       errorMessageField,
       codeField,

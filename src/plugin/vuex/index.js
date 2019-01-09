@@ -8,6 +8,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    currentRouteName: 'home',
+
     isLogin: systemBase.checkIsLogin(),
 
     isMini: false,
@@ -72,6 +74,10 @@ export default new Vuex.Store({
 
     setMini(state, payload) {
       state.isMini = payload;
+    },
+
+    switchRoute(state, routeName) {
+      state.currentRouteName = routeName;
     }
   },
 
@@ -98,12 +104,12 @@ export default new Vuex.Store({
       return state.isMini;
     },
 
-    menuList(state) {
-      return state.menuList;
-    },
-
     isOpenLeftMenu(state) {
       return state.isOpenLeftMenu;
+    },
+
+    currentRouteName(state) {
+      return state.currentRouteName;
     }
   },
 
@@ -138,6 +144,10 @@ export default new Vuex.Store({
 
     setViewPort({commit}, payload) {
       commit("setViewPort", payload);
+    },
+
+    switchRoute({commit}, payload) {
+      commit("switchRoute", payload);
     }
   },
 

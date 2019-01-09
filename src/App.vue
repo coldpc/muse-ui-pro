@@ -3,6 +3,7 @@
 
     <mu-drawer v-if="isLogin" :open.sync="openLeftPart" :docked="!isMini" :right="false" :width="viewPort.leftMenuWidth">
       <mu-paper :z-depth="1" class="menu-part-wrap">
+        <UserIcon></UserIcon>
         <Menu></Menu>
       </mu-paper>
     </mu-drawer>
@@ -21,8 +22,7 @@
   import { mapGetters } from 'vuex'
   import Menu from './Menu';
   import Header from './Header';
-  import {UtilsBase} from "./lib/utils/UtilsBase";
-
+  import UserIcon from './UserIcon';
 
   export default {
     data() {
@@ -32,7 +32,7 @@
     },
 
     components: {
-      Menu, Header
+      Menu, Header, UserIcon
     },
 
     watch: {
@@ -49,7 +49,7 @@
 
           let left = (isOpen && !this.isMini) ? this.viewPort.leftMenuWidth : 0;
           if (parseInt(this.viewPort.left) !== left) {
-            this.$store.dispatch("setViewPort", {left});
+            this.$store.dispatch("setLeftMenu", false);
           }
         }
       },

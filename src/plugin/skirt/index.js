@@ -1,0 +1,37 @@
+import Vue from "vue"
+import SkButton from "../../components/SkButton";
+import SkButtonGroup from "../../components/SkButtonGroup";
+import SkCheckBox from "../../components/SkCheckBox";
+import SkCol from "../../components/SkCol";
+import SkColumn from "../../components/SkColumn";
+import SkContainer from "../../components/SkContainer";
+import SkDatePicker from "../../components/SkDatePicker";
+import SkFixedBottom from "../../components/SkFixedBottom";
+import SkForm from "../../components/SkForm";
+import SkMoney from "../../components/SkMoney";
+import SkMulCheckBox from "../../components/SkMulCheckBox";
+import SkRadio from "../../components/SkRadio";
+import SkSelect from "../../components/SkSelect";
+import SkTable from "../../components/SkTable";
+import SkTag from "../../components/SkTag";
+import SkTextInput from "../../components/SkTextInput";
+import SkTimePicker from "../../components/SkTimePicker";
+
+Vue.component(SkDatePicker.name, SkDatePicker);
+Vue.component(SkButton.name, SkButton);
+Vue.component(SkButtonGroup.name, SkButtonGroup);
+Vue.component(SkCheckBox.name, SkCheckBox);
+Vue.component(SkCol.name, SkCol);
+Vue.component(SkColumn.name, SkColumn);
+Vue.component(SkContainer.name, SkContainer);
+Vue.component(SkDatePicker.name, SkDatePicker);
+Vue.component(SkFixedBottom.name, SkFixedBottom);
+Vue.component(SkForm.name, SkForm);
+Vue.component(SkMoney.name, SkMoney);
+Vue.component(SkMulCheckBox.name, SkMulCheckBox);
+Vue.component(SkRadio.name, SkRadio);
+Vue.component(SkSelect.name, SkSelect);
+Vue.component(SkTable.name, SkTable);
+Vue.component(SkTag.name, SkTag);
+Vue.component(SkTextInput.name, SkTextInput);
+Vue.component(SkTimePicker.name, SkTimePicker);

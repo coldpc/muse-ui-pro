@@ -5,16 +5,18 @@ export default class RouterAccess {
   // 收集非权限页面 默认登陆页
   noAccessPageArray = ["page.user.login", "page.test"];
   router = null;
+  store = null;
 
-  constructor(router) {
+  constructor(router, store) {
     this.router = router;
+    this.store = store;
 
     router.beforeEach( (to, from, next) => {
       this.beforeEach(to, from, next);
     });
 
-    router.afterEach(() => {
-
+    router.afterEach((route) => {
+      this.afterEach(route);
     });
   }
 
@@ -28,6 +30,7 @@ export default class RouterAccess {
   }
 
   afterEach(route) {
+    this.store.dispatch("switchRoute", route.name);
     // 新页面滚动到顶部
     window.document.documentElement.scrollTop = window.document.body.scrollTop = 0;
   }
