@@ -57,6 +57,6 @@ export default class CookieApi {
   static deleteCookie(key) {
     let now = new Date;
     now.setTime(now.getTime() - 1);
-    document.cookie = `${key}=1;expires=${now.toUTCString()}`;
+    document.cookie = `${key}=1;expires=${now.toUTCString()};path=/`;
   }
 }

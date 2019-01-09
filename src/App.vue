@@ -1,15 +1,15 @@
 <template>
   <div :class="`main-container ${isMini ? 'min-body' : 'common-body'} ${isLogin ? 'auth-body' : 'no-auth-body'}`">
 
-    <mu-drawer :open.sync="openLeftPart" :docked="!isMini" :right="false" width="260">
+    <mu-drawer v-if="isLogin" :open.sync="openLeftPart" :docked="!isMini" :right="false" :width="viewPort.leftMenuWidth">
       <mu-paper :z-depth="1" class="menu-part-wrap">
         <Menu></Menu>
       </mu-paper>
     </mu-drawer>
 
-    <div class="right-part" :style="{paddingTop: viewPort.top + 'px', marginLeft: viewPort.left + 'px'}">
+    <div class="right-part" :style="isLogin ? {paddingTop: viewPort.top + 'px', marginLeft: viewPort.left + 'px'} : {}">
 
-      <Header @clickMenu="onClickBarMenu"></Header>
+      <Header  v-if="isLogin" @clickMenu="onClickBarMenu"></Header>
       <div class="route-content">
         <router-view />
       </div>
@@ -41,16 +41,18 @@
       },
 
       isOpenLeftMenu(isOpen) {
-        let viewPort = UtilsBase.deepCopy(this.viewPort);
-        if (isOpen && !this.isMini && viewPort.left === 0) {
-          viewPort.left = 260;
-          this.setViewPort(viewPort);
+        // 状态管理触发
+        if (this.openLeftPart !== isOpen) {
+          return this.openLeftPart = isOpen;
+        }else {
+          this.$store.dispatch("setLeftMenu", isOpen);
 
-        }else if (viewPort.left > 0){
-          viewPort.left = 0;
-          this.setViewPort(viewPort);
+          let left = (isOpen && !this.isMini) ? this.viewPort.leftMenuWidth : 0;
+          if (parseInt(this.viewPort.left) !== left) {
+            this.$store.dispatch("setViewPort", {left});
+          }
         }
-      }
+      },
     },
 
     created() {
@@ -70,10 +72,6 @@
     methods: {
       onClickBarMenu() {
         this.openLeftPart = !this.openLeftPart;
-      },
-
-      setViewPort(viewPort) {
-        this.$store.dispatch("setViewPort", viewPort);
       }
     }
   }

@@ -24,7 +24,6 @@
   import SkButton from '../../components/SkButton';
   import DataSet from "../../lib/utils/DataSet";
   import HttpClient from "../../lib/http/HttpClient";
-  import base from "../../lib/base";
   import {EnRoutesConfig, RouterService} from "../../plugin/router";
   import SystemApi from "../../lib/http/SystemApi";
 

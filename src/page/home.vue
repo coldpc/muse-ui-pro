@@ -95,7 +95,7 @@
 
         selectOptionDs: new DataSet({
           queryUrl: SystemApi.getProductChild,
-          isAutoQuery: false
+          isAutoQuery: true
         })
       };
     },

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import './interceptors';
 import {UtilsBase} from "../utils/UtilsBase";
-import base from "../base";
+import systemBase from "../systemBase";
 
 
 /******请求类型**********/
@@ -93,7 +93,7 @@ class HttpClient {
       // 控制masker
       let loading = null;
       if (mask) {
-        loading = base.loading(mask);
+        loading = systemBase.loading(mask);
       }
 
       // 执行请求
@@ -244,7 +244,7 @@ class HttpClient {
   static ctrlError({error, isCatchError, catchErrorCode}) {
     // 一种是用户不抓不异常， 或者不是用户感兴趣的异常
     if (!isCatchError || (!!catchErrorCode && !UtilsBase.checkIsEqual(error.code, catchErrorCode))) {
-      base.alert(error.message);
+      systemBase.alert(error.message);
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div style="height: 60px">
-      <div class="fixed-bottom transition">
+      <div class="fixed-bottom transition" :style="{left: viewPort.left + 'px'}">
         <mu-paper :z-depth="3">
           <div class="fixed-bottom-content">
             <slot></slot>
@@ -11,14 +11,18 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex';
   export default {
     name: "sk-fixed-bottom",
     data() {
       return {};
     },
 
-    computed: {
-    }
+    computed:{
+      ...mapGetters({
+        "viewPort": "viewPort"
+      })
+    },
   }
 </script>
 
@@ -31,6 +35,7 @@
     position: fixed;
     z-index: 100;
     text-align: center;
+    transition: left .45s cubic-bezier(.23,1,.32,1);
 
     .fixed-bottom-content{
       padding: 20px 45px;

@@ -1,4 +1,4 @@
-import base from "./lib/base";
+import systemBase from "./lib/systemBase";
 
 export default class RouterAccess {
 
@@ -20,7 +20,7 @@ export default class RouterAccess {
 
   beforeEach(to, from, next) {
     let isNeedAccess = this.noAccessPageArray.indexOf(to.name) === -1;
-    if (isNeedAccess && !base.checkIsLogin()) {
+    if (isNeedAccess && !systemBase.checkIsLogin()) {
       next({name: this.noAccessPageArray[0]});
     } else {
       next();

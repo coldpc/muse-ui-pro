@@ -82,7 +82,7 @@ export class UtilsBase {
 
   /**
    * 检测客户端机型和环境
-   * @returns {{isWx: boolean, isIos: boolean, isAndroid: boolean}}
+   * @returns {{isWx: boolean, isIos: boolean, isAndroid: boolean, width: number, height: number}}
    */
   static getClient() {
     const WEI_XIN_APP_SIGN = 'microMessenger';

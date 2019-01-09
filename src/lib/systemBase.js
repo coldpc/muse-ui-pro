@@ -19,7 +19,7 @@ class Base {
   }
 
   install(Vue){
-    Vue.prototype.$base = this;
+    Vue.prototype.$systemBase = this;
   }
 
   use() {
@@ -94,6 +94,7 @@ class Base {
 }
 
 
-const base = new Base();
-Vue.use(base);
-export default base;
+const systemBase = new Base();
+Vue.use(systemBase);
+
+export default systemBase;

@@ -1,40 +1,20 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import user from './modules/user'
-import base from "../../lib/base";
+import systemBase from "../../lib/systemBase";
 import {UtilsBase} from "../../lib/utils/UtilsBase";
 
 Vue.use(Vuex);
 
-const client = UtilsBase.getClient();
-
 export default new Vuex.Store({
   state: {
-    isLogin: false,
-
-    /**
-     * 定义viewPort
-     * 为了兼容手机版本
-     */
-    client: client,
+    isLogin: systemBase.checkIsLogin(),
 
     isMini: false,
 
-    isOpenLeftMenu: false,
+    isOpenLeftMenu: true,
 
-    viewPort: {},
-
-    menuList: [{
-      path: "",
-      title: "",
-      icon: "",
-
-      children: [{
-        path: "",
-        title: "",
-        icon: ""
-      }]
-    }]
+    viewPort: {}
   },
 
 
@@ -46,44 +26,39 @@ export default new Vuex.Store({
    */
   mutations: {
     login(state, payload) {
-      base.setToken(UtilsBase.createRandomStr());
-      base.saveUserData(payload);
+      systemBase.setToken(UtilsBase.createRandomStr());
+      systemBase.saveUserData(payload);
       state.isLogin = true;
     },
 
-    logOut(state) {
-      base.removeToken();
-      base.removeUserData();
+    logout(state) {
+      systemBase.removeToken();
+      systemBase.removeUserData();
       state.isLogin = false;
     },
 
     /**
      * 设置viewport
      * @param state
-     * @param payload {{width, height}}
+     * @param payload {{top, left, right, bottom, leftMenuWidth, topBarHeight}}
      */
     setViewPort(state, payload) {
-      let isMini = payload.width < 1024;
-      let initLeft = 0;
+      let viewPort = state.viewPort;
+      let {top = viewPort.top,
+        left = viewPort.left,
+        right = viewPort.right,
+        bottom = viewPort.bottom,
+        leftMenuWidth = viewPort.leftMenuWidth,
+        topBarHeight = viewPort.topBarHeight
+      } = payload;
 
-      if (!isMini && state.isOpenLeftMenu) {
-        initLeft = 260;
-      }
-
-      // 是否为mini
-      state.isMini = isMini;
-
-      // 设置viewport
-      state.viewPort = isMini ? {
-        top: 64,
-        left: initLeft,
-        right: 0,
-        bottom: 0
-      } : {
-        top: 64,
-        left: initLeft,
-        right: 0,
-        bottom: 0
+      state.viewPort = {
+        top,
+        left,
+        right,
+        bottom,
+        leftMenuWidth,
+        topBarHeight
       }
     },
 
@@ -93,6 +68,10 @@ export default new Vuex.Store({
 
     setLeftMenu(state, payload) {
       state.isOpenLeftMenu = payload;
+    },
+
+    setMini(state, payload) {
+      state.isMini = payload;
     }
   },
 
@@ -145,8 +124,8 @@ export default new Vuex.Store({
       commit('logout');
     },
 
-    setViewPort({commit, dispatch}, payload){
-      commit("setViewPort", payload);
+    setMini({commit}, payload) {
+      commit("setMini", payload);
     },
 
     toggleLeftMenu({commit}) {
@@ -155,6 +134,10 @@ export default new Vuex.Store({
 
     setLeftMenu({commit}, payload) {
       commit("setLeftMenu", payload);
+    },
+
+    setViewPort({commit}, payload) {
+      commit("setViewPort", payload);
     }
   },
 

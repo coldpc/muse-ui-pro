@@ -1,10 +1,10 @@
 import * as types from './mutationsTypes'
-import base from '../../../../lib/base';
+import systemBase from '../../../../lib/systemBase';
 
 const mutations = {
     [types.ALTER] (state, data) {
       state.data = data;
-      base.saveUserData(data);
+      systemBase.saveUserData(data);
     }
 };
 
