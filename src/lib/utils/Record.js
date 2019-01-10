@@ -112,4 +112,13 @@ export default class Record extends EventListener {
     }
   }
 
+  /**
+   * 同时更新多个字段
+   * @param data
+   */
+  update(data){
+    for (let key in data){
+      this.setValue(key, data[key]);
+    }
+  }
 }

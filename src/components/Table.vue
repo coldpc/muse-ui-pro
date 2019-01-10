@@ -1,4 +1,23 @@
 <script type="text/javascript">
+
+  /**
+   *
+   * table的使用方法非常简单 column的属性查看上面
+   * scopedSlots: th 放在表格的行
+   * scopedSlots: default 选在表格内容
+   *
+   * <Table :bind="tableDs">
+       <template slot-scope="record">
+         <SkColumn :isAutoRender="false" @click="onClickCell" view-type="text" title="渠道id" name="channelCode" :sortable="false" align="center">
+           <div>中国式：文化</div>
+           <div>{{record && record.getValue('channelCode')}}</div>
+         </SkColumn>
+         <SkColumn @click="onClickCell" view-type="date" title="日期" name="updateTime" :sortable="false" align="center"></SkColumn>
+         <SkColumn @click="onClickCell" editable edit-type="text-input" :option-bind="selectOptionDs" display-field="productChildName" value-field="productChildId" title="渠道code" name="channelName" :sortable="true" align="center"/>
+       </template>
+       </Table>
+   */
+
   import DataSet from "../lib/utils/DataSet";
   import {UtilsBase} from "../lib/utils/UtilsBase";
 
@@ -17,7 +36,7 @@
       let scopedSlots = {
         default: (scope) => {
           let row = scope.row;
-          return setNodesRecord(this.$scopedSlots.default(row), row);
+          return setNodesRecord(this.$scopedSlots.default(row), row, scope.$index);
         }
       };
 
@@ -32,7 +51,7 @@
         };
       }
 
-      return (<div className="main-container">
+      return (<div class="sk-table-container">
         <mu-paper zDepth={2}>
           <div class="sk-table-part">
             <mu-data-table ref="table" selectable={this.selectable} selectAll={this.selectAll} checkbox={this.selectable}
@@ -49,7 +68,6 @@
                                   this.sort = sort;
                                 },
                                 'row-click': this.onClickRow,
-                                'select-change': this.onSelectChange,
                                 'sort-change': this.handleSortChange
                               }
                            }}
@@ -99,13 +117,14 @@
       }
 
       // 设置绑定的record
-      function setNodesRecord(nodes, record) {
+      function setNodesRecord(nodes, record, index) {
         let node, props;
         for (let i = 0, l = nodes.length; i < l; i++) {
           node = nodes[i];
           if (node.tag && node.tag.indexOf("sk-column")) {
             props = node.componentOptions.propsData || {};
             props.record = record;
+            props.index = index;
             node.componentOptions.propsData = props;
           }
         }
@@ -181,6 +200,10 @@
     watch: {
       bind(newDs, oldDs) {
         this.setBindDs(newDs, oldDs);
+      },
+
+      selects(value) {
+        this.onSelectChange(value);
       }
     },
 
@@ -231,6 +254,7 @@
       getSelectedRecords(selects) {
         let records = this.bind.getRecords(), record;
         for (let i = 0, l = records.length; i < l; i++) {
+          record = records[i];
           record.isSelected = selects.indexOf(i) > -1;
         }
       },
@@ -273,5 +297,65 @@
     height: 45px;
     margin-left: 20px;
     width: 100px;
+  }
+</style>
+
+
+
+<style lang="scss">
+  .sk-table-container {
+    .mu-text-field-content {
+      padding-bottom: 0px;
+      padding-top: 0px;
+    }
+    .mu-input {
+       min-height: 36px;
+       color: rgba(0,0,0,.54);
+       margin-bottom: 0px;
+       padding-bottom: 0px;
+       padding-top: 0px;
+    }
+    .mu-text-field-input {
+      border: thin solid #ddd;
+      padding: 8px;
+      height: 36px;
+      font-size: 14px;
+      line-height: 24px;
+      border-radius: 4px;
+    }
+    .sk-select-part, .sk-date-picker{
+      border-radius: 4px;
+      border: thin solid #ddd;
+      .mu-select-input, .mu-text-field-input{
+        padding: 8px;
+        border: none;
+      }
+      .mu-text-field-input:focus{
+        box-shadow: none;
+      }
+    }
+    .mu-text-field-input:focus {
+      border-color: #00a;
+      box-shadow: 0px 0px 11px -3px #000;
+    }
+    .mu-input-line, .mu-input-focus-line {
+      display: none;
+    }
+    .mu-text-field-help {
+      display: none;
+    }
+    .has-error-editor .mu-text-field-input {
+      border-color: #e00;
+      box-shadow-color: #e00;
+    }
+    .page-size-select {
+      float: left;
+      width: 150px;
+      text-align: center;
+    }
+    .sk-td-content {
+      word-break: break-all;
+      white-space: normal;
+    }
   }
 </style>

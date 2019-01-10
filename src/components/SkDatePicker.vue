@@ -2,12 +2,14 @@
 <!--非常开心-->
 
 <template>
-  <mu-date-input v-model="dateValue" :container="getContainer" :actions="actions"
-                 :action-icon="actionIcon" @change="onChange" :format="displayFormat" :first-day-of-week="firstDayOfWeek"
-                 :min-date="getMinDate" :max-date="getMaxDate" :shouldDisableDate="shouldDisableDate"
-                 type="date"
-                 :error-text="error" :help-text="helpText" :disabled="disabled"
-                 :label="label" :label-float="labelFloat" :full-width="fullWidth"></mu-date-input>
+  <div class="sk-date-picker">
+    <mu-date-input v-model="dateValue" :container="getContainer" :actions="actions"
+                   :action-icon="actionIcon" @change="onChange" :format="displayFormat" :first-day-of-week="firstDayOfWeek"
+                   :min-date="getMinDate" :max-date="getMaxDate" :shouldDisableDate="shouldDisableDate"
+                   type="date"
+                   :error-text="error" :help-text="helpText" :disabled="disabled"
+                   :label="label" :label-float="labelFloat" :full-width="fullWidth"></mu-date-input>
+  </div>
 </template>
 
 <script>

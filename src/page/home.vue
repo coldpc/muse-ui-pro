@@ -37,11 +37,17 @@
       </SkRow>
     </skForm>
 
-
-    <Table :bind="selectOptionDs">
+    <Table :bind="tableDs" selectable>
       <template slot-scope="record">
-        <SkColumn title="渠道id" name="productChildId" :sortable="false" align="center"/>
-        <SkColumn title="渠道code" name="productChildName" :sortable="true" align="center"/>
+        <SkColumn :isAutoRender="false" @click="onClickCell" view-type="text" title="渠道id" name="channelCode" :sortable="false" align="center">
+          <div>中国式：文化</div>
+          <div>{{record && record.getValue('channelCode')}}</div>
+        </SkColumn>
+        <SkColumn @click="onClickCell" view-type="date" title="日期" name="updateTime" :sortable="false" align="center"></SkColumn>
+        <SkColumn @click="onClickCell" editable edit-type="text-input" :option-bind="selectOptionDs" display-field="productChildName" value-field="productChildId" title="渠道code" name="channelName" :sortable="true" align="center"/>
+        <SkColumn @click="onClickCell" editable edit-type="money" :option-bind="selectOptionDs" display-field="productChildName" value-field="productChildId" title="渠道code" name="channelCode" :sortable="true" align="center"/>
+        <SkColumn @click="onClickCell" editable edit-type="select" :option-bind="selectOptionDs" display-field="productChildName" value-field="productChildId" title="渠道code" name="channelName" :sortable="true" align="center"/>
+        <SkColumn @click="onClickCell" editable edit-type="date-picker" :option-bind="selectOptionDs" display-field="productChildName" value-field="productChildId" title="渠道code" name="updateTime" :sortable="true" align="center"/>
       </template>
     </Table>
 
@@ -134,6 +140,10 @@
 
       clear() {
         this.ds.getCurrentRecord().setData({});
+      },
+
+      onClickCell(e, value, index, record) {
+        console.log(arguments);
       }
     }
   }

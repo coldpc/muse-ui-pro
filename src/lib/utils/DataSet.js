@@ -20,8 +20,7 @@ export default class DataSet extends EventListener {
   static actionType = {
     query: "query",
     add: "add",
-    reset: "reset",
-    delete: "delete"
+    reset: "reset"
   };
 
   // 是否加载过数据 加载中 加载完成 自动发起查询 自动创建一条空数据 是否分页
@@ -52,16 +51,21 @@ export default class DataSet extends EventListener {
 
   /**
    * 构造函数
-   * @param parseQueryPara 查询的url参数处理
    * @param queryUrl 查询的url地址
-   * @param isAutoQuery 是否自动发起查询
+   * @param queryBind 查询的url地址
+   * @param queryPara 查询的url地址
    * @param parseData 格式化数据
+   * @param parseQueryPara 查询的url参数处理
+   * @param isAutoQuery 是否自动发起查询
+   * @param isPagination 是否自动发起查询
    * @param isAutoCreate 自动创建数据
    * @param pageSize 每一页数据条数 默认10
    * @param dataSource 数据源头
    * @param masker 遮罩 {info: '', dom}
    */
-  constructor({parseQueryPara, queryUrl, isAutoQuery, queryBind, queryPara, parseData, isPagination = false, isAutoCreate, pageSize = 10, dataSource, masker = null}) {
+  constructor({queryUrl, queryBind, queryPara, parseData, parseQueryPara,
+                isAutoQuery, isPagination = false, isAutoCreate,
+                pageSize = 10, dataSource, masker = null}) {
     super();
 
     this.parseQueryPara = parseQueryPara;
@@ -214,7 +218,7 @@ export default class DataSet extends EventListener {
   //新增
   add(data = {}) {
     let record = this.createRecord(data, Record.statusMap.new);
-    this.records.push(record);
+    this.getRecords().push(record);
     this.setCurrentRecord(record);
     return record;
   }
@@ -236,10 +240,10 @@ export default class DataSet extends EventListener {
   remove(value) {
     let records, currentRecord, record, index;
 
-    records = this.records;
-    currentRecord = this.currentRecord;
+    records = this.getRecords();
+    currentRecord = this.getCurrentRecord();
 
-    if (!(value instanceof Record)) {
+    if (UtilsBase.checkIsNumber(value)) {
       index = value;
       record = records[index];
     } else {
@@ -334,160 +338,103 @@ export default class DataSet extends EventListener {
     }
 
     //添加分页参数
-    para = this.setPaginationPara(para);
-
-    return para;
-  }
-
-  setPaginationPara(para) {
     if (this.isPagination) {
-      if (!para) {
-        para = {};
-      }
       para.pageSize = this.pageSize;
       para.pageNum = this.pageNum;
     }
+
     return para;
   }
 
   /*****************************get*****************************/
-  getCurrentValue(key) {
-    let record = this.getCurrentRecord();
-    if (record) {
-      return record.getValue(key);
-    }
-  }
-
-  //获取
+  /**
+   * 获取当前的数据
+   * @returns {*}
+   */
   getCurrentData() {
-    let record = this.currentRecord;
+    let record = this.getCurrentRecord();
     return !!record ? record.getData() : null;
   }
 
+  /**
+   * 获取当前的record
+   * @returns {*}
+   */
   getCurrentRecord() {
     return this.currentRecord;
   }
 
-  getAllData() {
-    let data = [], records = this.records;
-    for (var i = 0, l = records.length; i < l; i++) {
+  /**
+   * 获取records
+   * @returns {Array}
+   */
+  getRecords() {
+    return this.records;
+  }
+
+  /**
+   * 获取数据
+   * @returns {Array}
+   */
+  getData() {
+    let data = [], records = this.getRecords();
+    for (let i = 0, l = records.length; i < l; i++) {
       data.push(records[i].getData());
     }
     return data;
   }
 
-  //获取查询参数
+  /**
+   * 获取选择的数据
+   * @returns {Array}
+   */
+  getSelectedData() {
+    return DataSet.getRecordsData(this.getRecords(), true);
+  }
 
+  /**
+   * 获取选择的records
+   * @returns {Array}
+   */
+  getSelectedRecords() {
+    return DataSet.getRecordsData(this.getRecords(), true, true);
+  }
 
   /*********************对ds的操作******************************/
   doAction(type) {
-    let actions = this.actionType;
+    let actionType = DataSet.actionType;
     switch (type) {
-      case actions.query:
-        this.query();
+      case actionType.query:
+        this.query().catch();
         break;
 
-      case actions.submit:
-        this.submit();
-        break;
-
-      case actions.delete:
-        this.delete();
-        break;
-
-      case actions.add:
+      case actionType.add:
         this.add();
         break;
 
-      case actions.reset:
+      case actionType.reset:
         this.resetCurrentRecord();
         break;
 
       default:
         return false;
     }
-
     return true;
   }
 
+  /**
+   * 重置当前record
+   */
   resetCurrentRecord() {
     this.getCurrentRecord().reset();
   }
 
-  submit() {
-    let service = this.submitService;
-    let data = this.getCurrentData();
-    service.execute({
-      data: data,
-      mask: {},
-      success: function () {
-
-      }.bind(this)
-    })
-  }
-
   /**
-   *
-   * @param record
-   * 一行记录的record
-   *
+   *  发起校验
+   *  校验每一条record
+   *  所有的都通过返回true
+   * @returns {boolean}
    */
-  deleteRecord(record) {
-    let deleteService = this.deleteService;
-    if (deleteService) {
-      deleteService.execute({
-        data: record.getData(),
-        success: function () {
-          this.remove(record);
-          record = null;
-        }.bind(this)
-      });
-    } else {
-      this.remove(record);
-      record = null;
-    }
-  }
-
-  //如果存在deleteService将会直接调用
-  delete(outerRecords) {
-    let records = outerRecords || this.getSelectedRecords();
-    for (let i = 0; i < records.length; i++) {
-      this.deleteRecord(records[i]);
-    }
-    return records;
-  }
-
-  //获取选中的records
-  getSelectedRecords() {
-    let records = this.records, record, result = [];
-    for (let i = 0; i < records.length; i++) {
-      record = records[i];
-      if (record.selected) {
-        result.push(record);
-      }
-    }
-    return result;
-  }
-
-  getSelectedData() {
-    return this.getRecordsData(this.records, true);
-  }
-
-  getRecordsData(records, ifSelected) {
-    let record, result = [];
-    for (let i = 0; i < records.length; i++) {
-      record = records[i];
-      if (!ifSelected || (ifSelected && record.selected)) {
-        result.push(record.getData());
-      }
-    }
-    return result;
-  }
-
-  getRecords() {
-    return this.records;
-  }
-
   sendVerify() {
     let records = this.records, isPass = true, result;
     for (let i = 0, l = records.length; i < l; i++) {
@@ -497,9 +444,40 @@ export default class DataSet extends EventListener {
     return isPass;
   }
 
-  updateRecordsData(records, data) {
+  /**
+   * 批量更新dataSet的records
+   * @param data
+   */
+  updateAllRecords(data) {
+    DataSet.updateRecords(this.getRecords(), data);
+  }
+
+  /**
+   * 批量更新records
+   * @param records 要更新的records
+   * @param data 数据
+   */
+  static updateRecords(records, data) {
     for (let i = 0, l = records.length; i < l; i++) {
       records[i].update(data);
     }
+  }
+
+  /**
+   * 获取records相关的内容
+   * @param records
+   * @param isSelected record是否为选择的状态 true表示是， false表示所有
+   * @param isRecord
+   * @returns {Array}
+   */
+  static getRecordsData(records, isSelected, isRecord = false) {
+    let record, result = [];
+    for (let i = 0; i < records.length; i++) {
+      record = records[i];
+      if (!isSelected || (isSelected && record.isSelected)) {
+        result.push(isRecord ? record : record.getData());
+      }
+    }
+    return result;
   }
 }

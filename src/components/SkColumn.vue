@@ -2,10 +2,22 @@
   import MoneyApi from "../lib/utils/MoneyApi";
   import DateApi from "../lib/utils/DateApi";
 
+  export const EnColumnEvents = {
+    click: 'click'
+  };
+
   export default{
     name: "sk-column",
     props: {
       record: {},
+
+      // 这个参数至关重要
+      // 开启的话讲话弃置内部渲染
+      // 完全由模板渲染完成
+      isAutoRender: {
+        type: Boolean,
+        default: true
+      },
 
       name: {}, // 对应列内容的字段名
       title: {}, // 标题
@@ -16,11 +28,12 @@
       tooltip: {}, // 列的提示文字
       formatter: {type: Function},
 
-      viewType: {default: "text", type: String}, // 数据类型
+      format: {type: String}, // yyyy/MM/dd hh:mm:ss 数据类型为date时候有效
+      viewType: {default: "text", type: String}, // 数据类型 money img date
 
       isHide: {type: Boolean, default: false},
       required: {default: false},
-      rowIndex:{},
+      index:{},
       editable:{},
       editType:{},
       type: {type: String},
@@ -39,7 +52,27 @@
     },
 
     render: function (createElement) {
-      //现将数据拷贝过去
+      // 不自动渲染
+      if (!this.isAutoRender) {
+        return createElement(
+          "td",
+          {
+            on: {
+              click: this.onClick
+            },
+            props: {
+              name: name
+            },
+            style: {
+              width: this.width,
+              textAlign: this.align || "center"
+            }
+          },
+          [this.$slots.default]
+        );
+      }
+
+      /*****************自动渲染开始****************/
       let editable = this.editable;
       editable = editable !== false && typeof editable !== 'undefined';
 
@@ -53,17 +86,15 @@
         }
         componentName = "sk-" + componentName;
 
-        let props = this.props;
+        let props = this.$options.propsData;
         props.record = this.record;
-        props.type = this.type;
 
         //返回
         return createElement(
           "td",
           {
             on: {
-              click: this.onClick,
-              cellClick: this.onClick
+              click: this.onClick
             },
             props: {
               name: this.name,
@@ -94,10 +125,9 @@
             class: "sk-td-content " + this.className,
             title: !this.formatter ? display : ""
           },
-
           domProps: {
             innerHTML: display
-          }
+          },
         });
 
         let record = this.record, name = this.name;
@@ -110,8 +140,7 @@
           "td",
           {
             on: {
-              click: this.onClick,
-              cellClick: this.onClick
+              click: this.onClick
             },
             props: {
               name: name
@@ -121,7 +150,7 @@
               textAlign: this.align || "center"
             }
           },
-          [cellContent]
+          [cellContent, this.$slots.default]
         );
       }
     },
@@ -148,7 +177,7 @@
 
         //value可以二次渲染
         if (typeof func === "function"){
-          value = func(value, this.rowIndex, this.record);
+          value = func(value, this.index, this.record);
         }else{
           value = this.getViewByType(value);
         }
@@ -159,31 +188,19 @@
         return value;
       },
 
-      onClick(e){
-        let listener = this.listeners;
-        if (listener && listener['cell-click']){
-          listener['cell-click'](e, this.getValue(), this.name, this.rowIndex, this.record);
-        }
+      onClick(event){
+        this.$emit(EnColumnEvents.click, {event, value: this.getValue(), index: this.index, record: this.record});
       },
 
       getViewByType(v){
         let viewType = this.viewType;
         let result;
         switch(viewType){
-          case "img":
-            let src = typeof v ==="string" ? v : ((!!v && v[0] && v[0].path) ? v[0].path : "");
-            if (src){
-              result = "<div class='sk-img-viewer'><img class='sk-img' src='" + src + "'/></div>";
-            }else{
-              result = "";
-            }
-            break;
-
           case "money":
             result = MoneyApi.format(v);
             break;
 
-          case "time":
+          case "date":
             result = DateApi.format(v);
             break;
 
