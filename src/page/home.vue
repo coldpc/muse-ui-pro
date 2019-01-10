@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <sk-layout>
     <skForm :bind="ds">
       <SkRow>
         <SkCol :span="6">
@@ -28,25 +28,37 @@
         </SkCol>
 
         <SkCol :span="6">
-          <SKSelect multiple display-field="productChildName" value-field="productChildId" name="productChildId" label="类型"  :option-bind="selectOptionDs" init-value="2"></SKSelect>
+          <SkSelect display-field="productChildName" value-field="productChildId" name="productChildId" label="类型"  :option-bind="selectOptionDs" init-value="2"></SkSelect>
         </SkCol>
 
         <SkCol :span="6">
           <SkTag name="tags" label="标签" :init-value="[2]"></SkTag>
         </SkCol>
       </SkRow>
-      <SkFixedBottom>
-        <SkButtonGroup align="center">
-          <skButton @click="reset">重置</skButton>
-          <skButton color="primary" @click="clear">清除</skButton>
-        </SkButtonGroup>
-      </SkFixedBottom>
     </skForm>
-  </div>
+
+
+    <Table :bind="tableDs">
+      <template slot-scope="record">
+        <SkColumn title="渠道id" name="id" :sortable="true" align="center"/>
+        <SkColumn title="渠道code" name="channelCode"  :sortable="true" align="center"/>
+        <SkColumn title="链接" name="channelUrl"/>
+      </template>
+    </Table>
+
+    <SkFixedBottom>
+      <SkButtonGroup align="center">
+        <skButton @click="reset">重置</skButton>
+        <skButton color="primary" @click="clear">清除</skButton>
+      </SkButtonGroup>
+    </SkFixedBottom>
+  </sk-layout>
 </template>
 
 <script>
   import SkTextInput  from '../components/SkTextInput';
+  import Table  from '../components/Table';
+  import SkColumn  from '../components/SkColumn';
   import SkRadio from '../components/SkRadio';
   import SkCheckBox from '../components/SkCheckBox';
   import SkButton from '../components/SkButton';
@@ -58,7 +70,7 @@
   import SkCol from '../components/SkCol';
   import SkButtonGroup from '../components/SkButtonGroup';
   import SkMoney from '../components/SkMoney';
-  import SKSelect from '../components/SKSelect';
+  import SkSelect from '../components/SkSelect';
   import SkTag from '../components/SkTag';
   import DataSet from "../lib/utils/DataSet";
   import SystemApi from "../lib/http/SystemApi";
@@ -76,9 +88,11 @@
       SkButton,
       SkRadio,
       SkTag,
-      SKSelect,
+      SkSelect,
       SkCol,
-      SkRow
+      SkRow,
+      Table,
+      SkColumn
     },
 
     data() {
@@ -95,6 +109,12 @@
 
         selectOptionDs: new DataSet({
           queryUrl: SystemApi.getProductChild,
+          isAutoQuery: true
+        }),
+
+        tableDs: new DataSet({
+          isPagination: true,
+          queryUrl: SystemApi.getChannelList,
           isAutoQuery: true
         })
       };

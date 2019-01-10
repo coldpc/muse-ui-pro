@@ -2,6 +2,10 @@
   <div class="login-part-container">
     <div class="login-page-part">
       <div class="login-content">
+        <h1>
+          <div>后台管理系统</div>
+          <div class="desc">MANAGER SYSTEM</div>
+        </h1>
         <skForm :bind="ds">
           <div class="form-item">
             <SkTextInput name="userName" label="用户名" required></SkTextInput>
@@ -88,9 +92,19 @@
   .login-content{
     width: 300px;
     background-color: rgba(255, 255, 255, 1);
-    padding: 30px 30px 50px 30px;
+    padding: 20px 30px 50px 30px;
   }
   .btn-con{
     margin-top: 30px;
+  }
+  h1{
+    margin: 0;
+    padding-bottom: 20px;
+    font-weight: normal;
+
+    .desc{
+      font-size: 12px;
+      color: #888;
+    }
   }
 </style>

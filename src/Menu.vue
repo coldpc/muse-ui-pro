@@ -114,14 +114,17 @@
     color: #666;
     font-size: 13px;
     cursor: pointer;
-    border-right: 4px solid transparent;
+    transition: all 300ms ease-in;
+    border-right: 0px solid #ec4924;
+    background-color: rgba(100, 100, 100, 0);
 
     :hover{
       background-color: rgba(100, 100, 100, 0.1);
     }
     &.active{
       color: #ec4924;
-      border-right-color: #ec4924;
+      border-right-width: 4px;
+      background: rgba(236, 73, 36, 0.1);
     }
 
     .main{

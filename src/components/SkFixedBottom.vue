@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 60px">
+  <div style="height: 100px">
       <div class="fixed-bottom transition" :style="{left: viewPort.left + 'px'}">
         <mu-paper :z-depth="3">
           <div class="fixed-bottom-content">

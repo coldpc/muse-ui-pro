@@ -12,7 +12,6 @@ import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
 import MuseUILoading from 'muse-ui-loading';
 Vue.use(MuseUILoading);
 
-
 Vue.config.productionTip = false;
 
 /*******************引入muse-ui样式*************/

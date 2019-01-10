@@ -95,6 +95,9 @@
       bind: {
         type: DataSet,
       },
+      record: {
+        type: Record
+      },
 
       underlineColor: {
         type: String,
@@ -119,8 +122,12 @@
     },
 
     created() {
-      if (this.bind) {
-        this.setBindDs(this.bind);
+      if (this.bind || this.record) {
+        if (this.record) {
+          this.setBindRecord(this.record);
+        }else if (this.bind){
+          this.setBindDs(this.bind);
+        }
       }else {
         this.setValue(!UtilsBase.isNull(this.value) ?  this.value : this.getInitValue(), true);
       }
@@ -131,8 +138,11 @@
     },
 
     watch: {
-      bind(newValue, oldValue) {
+      bind(newValue) {
         this.setBindDs(newValue);
+      },
+      record(record) {
+        this.setBindRecord(record);
       }
     },
 

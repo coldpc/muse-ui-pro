@@ -8,6 +8,7 @@ export default class DataSet extends EventListener {
   static eventTypes = {
     onStartQuery: "onStartQuery", //record ds
     onLoad: "onLoad", //record ds
+    onLoading: "onLoading", //加载中
     onIndexChange: "onIndexChange", //record ds
     onUpdate: "onUpdate", // 更新字段
     onRemove: "onRemove", //record index ds
@@ -26,7 +27,6 @@ export default class DataSet extends EventListener {
   // 是否加载过数据 加载中 加载完成 自动发起查询 自动创建一条空数据 是否分页
   hasLoadData = false;
   isLoading = false;
-  isLoadCompleted = false;
   isAutoQuery = false;
   isAutoCreate = false;
 
@@ -34,10 +34,11 @@ export default class DataSet extends EventListener {
   isPagination = false;
   isMore = true;
   pageSize = 10;
-  currentPage = 1;
+  pageNum = 1;
 
 
   // 查询的服务
+  parseQueryPara = null;
   queryUrl = '';
   masker = null;
   parseData = null;
@@ -49,6 +50,7 @@ export default class DataSet extends EventListener {
 
   /**
    * 构造函数
+   * @param parseQueryPara 查询的url参数处理
    * @param queryUrl 查询的url地址
    * @param isAutoQuery 是否自动发起查询
    * @param parseData 格式化数据
@@ -57,9 +59,10 @@ export default class DataSet extends EventListener {
    * @param dataSource 数据源头
    * @param masker 遮罩 {info: '', dom}
    */
-  constructor({queryUrl, isAutoQuery, queryBind, queryPara, parseData, isPagination = false, isAutoCreate, pageSize = 10, dataSource, masker = null}) {
+  constructor({parseQueryPara, queryUrl, isAutoQuery, queryBind, queryPara, parseData, isPagination = false, isAutoCreate, pageSize = 10, dataSource, masker = null}) {
     super();
 
+    this.parseQueryPara = parseQueryPara;
     this.queryUrl = queryUrl;
     this.pageSize = pageSize;
     this.masker = masker;
@@ -82,7 +85,7 @@ export default class DataSet extends EventListener {
    */
   reset() {
     this.setData();
-    this.currentPage = 1;
+    this.pageNum = 1;
     this.hasLoadData = false;
     this.isLoading = false;
   }
@@ -102,36 +105,28 @@ export default class DataSet extends EventListener {
    */
   async query(para = null) {
     if (!para) {
-      this.currentPage = 1;
+      this.pageNum = 1;
       para = this.getQueryPara();
     }
 
+    //处理查询参数
+    if (typeof this.parseQueryPara === "function") {
+      para = this.parseQueryPara(para);
+    }
+
     try{
+      this.dispatch(DataSet.eventTypes.onLoading, this);
       let data = await HttpClient.request({
         url: this.queryUrl,
         data: para
       });
+      this.lastQueryPara = para;
       this.onLoadData(data);
     }catch (e) {
       this.dispatch(DataSet.eventTypes.onLoadFailed, e);
     }
 
     this.isLoading = false;
-  }
-
-  nextPage() {
-    this.gotoPage(++this.currentPage);
-  }
-
-  prePage() {
-    this.gotoPage(--this.currentPage);
-  }
-
-  gotoPage() {
-    let queryPara = UtilsBase.deepCopy(this.lastQueryPara || {});
-    queryPara.currentPage = this.currentPage;
-    queryPara.pageSize = this.pageSize;
-    this.query(queryPara);
   }
 
   /**
@@ -151,8 +146,10 @@ export default class DataSet extends EventListener {
   onLoadData(data) {
     if (this.isPagination && data.items) {
       this.totalCount = data.totalCount;
-      this.currentPage = data.pageNum;
+      this.pageNum = data.pageNum;
       this.totalPage = data.totalPage;
+      this.isMore = this.pageNum < this.totalPage;
+
       this.setData(data.items);
     } else {
       this.setData(data);
@@ -283,32 +280,25 @@ export default class DataSet extends EventListener {
   }
 
   /*********************分页相关*********************************/
-  setCurrentPage(page) {
-    if (this.currentPage != page) {
-      this.currentPage = page;
-      let para = this.lastQueryPara;
-      this.query(this.setPaginationPara(para), true);
+  gotoPage(pageNum, pageSize = this.pageSize) {
+    if (pageNum > 0 && !UtilsBase.checkIsEqual(this.pageNum, pageNum) && this.totalPage >= pageNum) {
+      let para = UtilsBase.deepCopy(this.lastQueryPara || {});
+      para.pageNum = pageNum;
+      para.pageSize = pageSize;
+      this.query(para, true).catch();
     }
-  }
-
-  setPageSize(size) {
-    this.pageSize = size;
-    let para = this.lastQueryPara;
-    this.query(this.setPaginationPara(para), true);
   }
 
   nextPage() {
-    let page = this.currentPage;
-    page += 1;
-    this.setCurrentPage(page);
+    this.gotoPage(this.pageNum + 1);
   }
 
   prePage() {
-    let page = this.currentPage;
-    page -= 1;
-    if (page > 0) {
-      this.setCurrentPage();
-    }
+    this.gotoPage(this.pageNum - 1);
+  }
+
+  setPageSize(pageSize) {
+    this.gotoPage(1, pageSize);
   }
 
   getQueryPara() {
@@ -329,23 +319,19 @@ export default class DataSet extends EventListener {
       para = Object.assign(para, temp || {});
     }
 
-    //处理查询参数
-    if (typeof this.parseQueryPara == "function") {
-      para = this.parseQueryPara(para);
-    }
-
     //添加分页参数
     para = this.setPaginationPara(para);
+
     return para;
   }
 
   setPaginationPara(para) {
-    if (this.pagination) {
+    if (this.isPagination) {
       if (!para) {
         para = {};
       }
       para.pageSize = this.pageSize;
-      para.pageNum = this.currentPage;
+      para.pageNum = this.pageNum;
     }
     return para;
   }

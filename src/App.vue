@@ -49,7 +49,7 @@
 
           let left = (isOpen && !this.isMini) ? this.viewPort.leftMenuWidth : 0;
           if (parseInt(this.viewPort.left) !== left) {
-            this.$store.dispatch("setLeftMenu", false);
+            this.$store.dispatch("setViewPort", {left});
           }
         }
       },

@@ -1,7 +1,9 @@
 <template>
-  <form action="#" class="form-part" :style="formStyle">
-    <slot></slot>
-  </form>
+  <mu-paper :zDepth="1">
+    <form action="#" class="form-part" :style="formStyle">
+      <slot></slot>
+    </form>
+  </mu-paper>
 </template>
 
 <script type="text/javascript">
@@ -75,5 +77,7 @@
 <style scoped lang="scss">
   .form-part{
     padding: 10px 20px;
+    background-color: #fff;
+    margin-bottom: 20px;
   }
 </style>
