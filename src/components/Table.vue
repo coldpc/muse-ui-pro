@@ -20,6 +20,7 @@
 
   import DataSet from "../lib/utils/DataSet";
   import {UtilsBase} from "../lib/utils/UtilsBase";
+  import systemBase from "../lib/systemBase";
 
   export const EnTableEvents = {
     onRowClick: 'onRowClick',
@@ -27,10 +28,15 @@
     sortChange: "onSortChange"
   };
 
+  const ErrorTemplate = `template必须为scope的，<template slot-scope="record">`;
+
   export default {
     name: "sk-table",
 
     render() {
+      if (!this.$scopedSlots || !this.$scopedSlots.default) {
+        return systemBase.alert(ErrorTemplate);
+      }
       let columns = getTableColumns(this.$scopedSlots.default());
 
       let scopedSlots = {

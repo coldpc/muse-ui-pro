@@ -3,7 +3,7 @@
 
 <template>
   <div class="sk-date-picker">
-    <mu-date-input v-model="dateValue" :container="getContainer" :actions="actions"
+    <mu-date-input v-model="dateValue" :container="getContainer" :actions="actions" :action-click="onClickActionIcon"
                    :action-icon="actionIcon" @change="onChange" :format="displayFormat" :first-day-of-week="firstDayOfWeek"
                    :min-date="getMinDate" :max-date="getMaxDate" :shouldDisableDate="shouldDisableDate"
                    type="date"
@@ -236,6 +236,13 @@
 
       getValue() {
         return this.getValueByType(this.dateValue);
+      },
+
+      onClickActionIcon() {
+        let input = this.$el.querySelector("input");
+        if (input) {
+          input.click();
+        }
       }
     }
   }
