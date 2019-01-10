@@ -35,6 +35,8 @@ export default class DataSet extends EventListener {
   isMore = true;
   pageSize = 10;
   pageNum = 1;
+  totalPage = 1;
+  totalCount = 1;
 
 
   // 查询的服务
@@ -148,6 +150,7 @@ export default class DataSet extends EventListener {
       this.totalCount = data.totalCount;
       this.pageNum = data.pageNum;
       this.totalPage = data.totalPage;
+      this.pageSize = data.pageSize;
       this.isMore = this.pageNum < this.totalPage;
 
       this.setData(data.items);
@@ -280,12 +283,11 @@ export default class DataSet extends EventListener {
   }
 
   /*********************分页相关*********************************/
-  gotoPage(pageNum, pageSize = this.pageSize) {
+  gotoPage(pageNum) {
     if (pageNum > 0 && !UtilsBase.checkIsEqual(this.pageNum, pageNum) && this.totalPage >= pageNum) {
       let para = UtilsBase.deepCopy(this.lastQueryPara || {});
       para.pageNum = pageNum;
-      para.pageSize = pageSize;
-      this.query(para, true).catch();
+      this.query(para).catch();
     }
   }
 
@@ -298,7 +300,19 @@ export default class DataSet extends EventListener {
   }
 
   setPageSize(pageSize) {
-    this.gotoPage(1, pageSize);
+    if (pageSize > 0 && !UtilsBase.checkIsEqual(this.pageSize, pageSize)) {
+      let para = UtilsBase.deepCopy(this.lastQueryPara || {});
+      para.pageSize = pageSize;
+      para.pageNum = 1;
+      this.query(para).catch();
+    }
+  }
+
+  sort(name, order) {
+    let para = UtilsBase.deepCopy(this.lastQueryPara || {});
+    para.sortField = name;
+    para.sortType = order;
+    this.query(para).catch();
   }
 
   getQueryPara() {

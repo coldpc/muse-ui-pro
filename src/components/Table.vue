@@ -33,7 +33,7 @@
       }
 
       return (<div className="main-container">
-        <mu-paper zDepth={1}>
+        <mu-paper zDepth={2}>
           <div class="sk-table-part">
             <mu-data-table ref="table" selectable={this.selectable} selectAll={this.selectAll} checkbox={this.selectable}
                            columns={columns} data={this.records}
@@ -61,6 +61,28 @@
                            scopedSlots={scopedSlots}>
             </mu-data-table>
           </div>
+
+          {(this.bind && this.bind.isPagination) ? <div class="page-part">
+            <div class="page-num">
+              <mu-pagination
+                current={this.pageNum} total={this.totalCount} pageCunt={5} pageSize={this.pageSize}
+                {...{
+                  on:{
+                    'update:current': this.onChangePageNum
+                  }
+                }}
+                raised={false} circle={false}/>
+            </div>
+
+            <div class="page-options">
+              <sk-select value={this.pageSize} {...{
+                on:{
+                  'change': this.onChangePageSize
+                }
+              }} options={[10, 20, 50, 100]} />
+            </div>
+
+          </div> : null}
         </mu-paper>
       </div>);
 
@@ -95,6 +117,7 @@
     data() {
       return {
         isLoading: false,
+        hasLoadData: false,
 
         records: [],
         selects: [],
@@ -102,10 +125,10 @@
           name: '',
           order: 'asc' // asc, desc
         },
-        columns: [
-          {title: 'Dessert (100g serving)', width: 200, name: 'name'},
-          {title: 'Calories', name: 'calories', width: 126, align: 'center', sortable: true}
-        ],
+        pageNum: 1,
+        pageSize: 10,
+        totalCount: 1,
+
       }
     },
 
@@ -156,8 +179,8 @@
     },
 
     watch: {
-      sort(newSort, oldSort) {
-        debugger;
+      bind(newDs, oldDs) {
+        this.setBindDs(newDs, oldDs);
       }
     },
 
@@ -173,7 +196,9 @@
         ds.addEventListener(DataSet.eventTypes.onLoadFailed, this.onLoadFailed);
 
         this.isLoading = ds.isLoading;
-        this.setRecords(ds.getRecords());
+        if (ds.hasLoadData) {
+          this.setRecords(ds.getRecords());
+        }
       },
 
       onLoading() {
@@ -183,6 +208,11 @@
       onLoad(records) {
         this.setRecords(records);
         this.isLoading = false;
+
+        let ds = this.bind;
+        this.pageSize = ds.pageSize;
+        this.totalCount = ds.totalCount;
+        this.pageNum = ds.pageNum;
       },
 
       onLoadFailed() {
@@ -190,6 +220,7 @@
       },
 
       setRecords(records) {
+        this.hasLoadData = true;
         this.records = records;
       },
 
@@ -212,13 +243,35 @@
         this.$emit(EnTableEvents.onRowClick, ...arguments);
       },
 
-      handleSortChange(){
+      handleSortChange(value){
+        this.bind.sort(value.name, value.order);
+      },
 
+      onChangePageSize(value) {
+        value = parseInt(value);
+        this.pageSize = value;
+        this.bind.setPageSize(value);
+      },
+
+      onChangePageNum(pageNum) {
+        this.pageNum = pageNum;
+        this.bind.gotoPage(this.pageNum);
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-
+  .page-part{
+    padding: 20px;
+  }
+  .page-num, .page-options{
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .page-options{
+    height: 45px;
+    margin-left: 20px;
+    width: 100px;
+  }
 </style>

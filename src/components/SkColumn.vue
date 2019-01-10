@@ -4,8 +4,6 @@
 
   export default{
     name: "sk-column",
-    functional: false,     //就可以访问外部数据
-
     props: {
       record: {},
 

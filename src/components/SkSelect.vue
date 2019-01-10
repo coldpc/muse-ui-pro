@@ -141,14 +141,14 @@
       //获取选择每一项的值
       getItemValue(record) {
         let field = this.valueField;
-        return !field ? record.getData() : record.getValue(field);
+        return !field || typeof record.getData() !== 'object' ? record.getData() : record.getValue(field);
       },
 
       //获取展示的值
       getItemDisplay(record) {
         let field = this.displayField;
-        let display = !field ? record.getData() : record.getValue(field);
-        return display || "-";
+        let display = !field || typeof record.getData() !== 'object'  ? record.getData() : record.getValue(field);
+        return '' + (display || '-')
       },
 
       setInnerValue(value){

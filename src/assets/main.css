@@ -6,22 +6,22 @@ html, body {
   background-color: #eee !important;
 }
 
-.mu-item.is-selected,
-.mu-slider,
-.mu-breadcrumbs-item,
-.mu-radio-checked,
-.mu-form-item__focus,
-.mu-checkbox-checked,
-.mu-switch-checked,
-.mu-picker,
-.mu-input__focus,
-.mu-refresh-control,
-.mu-app-drawer-header .mu-appbar-title-text:hover,
-.mu-app-drawer-header .mu-app-version:hover,
-.mu-bottom-item-active .mu-bottom-item-icon,
-.mu-bottom-item-active .mu-bottom-item-text {
-  color: #ec4924;
-}
-.mu-timepicker-number.mu-timepicker-number__selected{
-  background-color: #ec4924;
-}
+/*.mu-item.is-selected,*/
+/*.mu-slider,*/
+/*.mu-breadcrumbs-item,*/
+/*.mu-radio-checked,*/
+/*.mu-form-item__focus,*/
+/*.mu-checkbox-checked,*/
+/*.mu-switch-checked,*/
+/*.mu-picker,*/
+/*.mu-input__focus,*/
+/*.mu-refresh-control,*/
+/*.mu-app-drawer-header .mu-appbar-title-text:hover,*/
+/*.mu-app-drawer-header .mu-app-version:hover,*/
+/*.mu-bottom-item-active .mu-bottom-item-icon,*/
+/*.mu-bottom-item-active .mu-bottom-item-text {*/
+  /*color: #ec4924;*/
+/*}*/
+/*.mu-timepicker-number.mu-timepicker-number__selected{*/
+  /*background-color: #ec4924;*/
+/*}*/

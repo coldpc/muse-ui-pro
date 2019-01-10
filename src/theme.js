@@ -1,4 +1,4 @@
-import theme from 'muse-ui/lib/theme';
+// import theme from 'muse-ui/lib/theme';
 
 // const light = {
 //   primary: '#2196f3',
@@ -22,7 +22,7 @@ import theme from 'muse-ui/lib/theme';
 //     default: '#fafafa'
 //   }
 // };
-
-theme.add('skirt', {
-  primary: "#ec4924",
-}, 'light');
+//
+// theme.add('skirt', {
+//   primary: "#ec4924",
+// }, 'light');

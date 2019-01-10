@@ -24,7 +24,6 @@
 
       // 此值会覆盖record的值
       value: {
-        type: String | Number | Boolean
       },
 
       // 初始值 此值会覆盖record的status为new的值

@@ -38,11 +38,10 @@
     </skForm>
 
 
-    <Table :bind="tableDs">
+    <Table :bind="selectOptionDs">
       <template slot-scope="record">
-        <SkColumn title="渠道id" name="id" :sortable="true" align="center"/>
-        <SkColumn title="渠道code" name="channelCode"  :sortable="true" align="center"/>
-        <SkColumn title="链接" name="channelUrl"/>
+        <SkColumn title="渠道id" name="productChildId" :sortable="false" align="center"/>
+        <SkColumn title="渠道code" name="productChildName" :sortable="true" align="center"/>
       </template>
     </Table>
 

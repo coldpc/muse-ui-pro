@@ -14,6 +14,7 @@ import SkTag from "../../components/SkTag";
 import SkTextInput from "../../components/SkTextInput";
 import SkTimePicker from "../../components/SkTimePicker";
 import SkLayout from "../../components/SkLayout";
+import SkPart from "../../components/SkPart";
 
 Vue.component(SkButton.name, SkButton);
 Vue.component(SkButtonGroup.name, SkButtonGroup);
@@ -31,3 +32,4 @@ Vue.component(SkTag.name, SkTag);
 Vue.component(SkTextInput.name, SkTextInput);
 Vue.component(SkTimePicker.name, SkTimePicker);
 Vue.component(SkLayout.name, SkLayout);
+Vue.component(SkPart.name, SkPart);
