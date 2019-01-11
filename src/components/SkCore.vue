@@ -208,7 +208,7 @@
 
         if (typeof validFunc === "function"){
           errorMsg = validFunc(value, this.name, this) || "";
-        }else if (isRequired && UtilsBase.isNull(value)){
+        }else if (isRequired && this.checkIsNull(value)){
           errorMsg = "此字段不可以为空";
         }
 
@@ -219,6 +219,10 @@
 
         // 设置error
         this.setError(errorMsg);
+      },
+
+      checkIsNull(value) {
+        return UtilsBase.isNull(value);
       },
 
       onLoad(record) {
