@@ -1,6 +1,6 @@
 <template>
   <div class="header-bar" :style="{left: (viewPort || {}).left + 'px'}">
-    <mu-appbar style="width: 100%;" color="primary">
+    <mu-appbar style="width: 100%;" color="#fff" z-depth="2" textColor="#999">
       <mu-button icon slot="left" @click="onClickBarMenu">
         <mu-icon value="menu"></mu-icon>
       </mu-button>
@@ -65,6 +65,11 @@
     top: 0;
     right: 0;
     z-index: 100;
+  }
+
+  .title{
+    color: #666;
+    font-size: 18px;
   }
 
   .logout-btn{

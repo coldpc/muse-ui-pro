@@ -2,10 +2,13 @@
 <!--非常开心-->
 
 <template>
-  <mu-date-input :action-icon="actionIcon"
+  <div class="sk-time-picker">
+    <mu-date-input :action-icon="actionIcon"
                  type="time" :clock-type="clockType" v-model="innerValue" @change="onChange"
                  :error-text="errorText" :help-text="helpText" :disabled="disabled"
                  :label="label" :label-float="labelFloat" :full-width="fullWidth"></mu-date-input>
+
+  </div>
 </template>
 
 <script>
@@ -93,3 +96,13 @@
     }
   }
 </script>
+
+
+<style lang="scss">
+  .sk-time-picker{
+    .mu-icon{
+      zoom: 0.8;
+      color: #999;
+    }
+  }
+</style>

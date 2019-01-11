@@ -1,6 +1,6 @@
 <template>
   <sk-part>
-    <form action="#" class="form-part" :style="formStyle">
+    <form action="#" class="form-part" :style="formStyle" :class="{'padding-form': hasPadding}">
       <slot></slot>
     </form>
   </sk-part>
@@ -47,11 +47,18 @@
 
     props: {
       bind: {},
+
       title: {
         type: String
       },
+
       formStyle: {
         type: Object
+      },
+
+      hasPadding: {
+        default: true,
+        type: Boolean
       }
     },
 
@@ -76,7 +83,11 @@
 
 <style scoped lang="scss">
   .form-part{
-    padding: 10px 20px;
     margin-bottom: 20px;
+    box-shadow: 0 3px 10px -4px rgba(0,0,0,.26);
+    border-bottom: 1px solid #eee;
+    &.padding-form{
+      padding: 10px 20px;
+    }
   }
 </style>

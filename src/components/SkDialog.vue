@@ -1,167 +1,106 @@
 <template>
-  <transition name="mu-dialog-slide" @after-enter="show()" @after-leave="hide()">
-    <div v-show="isShow"
-         class="sk-win-container transition"
-         :class="titleClass"
-         @click="onClickContainer"
-         :style="{left: viewPort.left + 'px', top: viewPort.top + 'px'}">
-
-      <div class="sk-win-content" :style="{width: width, height: height, maxWidth: '100%', maxHeight: '100%'}">
-        <div class="title-con">
-          <div>
-            <span class="title">{{title}}</span>
-            <span class="small-title">{{smallTitle}}</span>
-          </div>
-          <div class="close-con">
-            <mu-icon-button icon="close" @click="hide"/>
-          </div>
-        </div>
-
-        <div class="body-con">
-          <slot></slot>
-        </div>
+  <mu-container>
+    <mu-dialog :width="width" :height="height" transition="slide-bottom"
+               dialog-class="dialog-relative"
+               :fullscreen="isFullscreen"
+               :open.sync="isOpenDialog"
+               :append-body="true" scrollable
+               :lock-scroll="true" :title="title">
+      <div class="dialog-close" @click="close">
+        <mu-ripple></mu-ripple>
+        <mu-icon value="close" size="18"></mu-icon>
       </div>
-    </div>
-  </transition>
+      <div class="main-content">
+        <slot></slot>
+      </div>
+      <div class="actions-content" v-if="hasAction" slot="actions">
+        <slot name="actions"></slot>
+      </div>
+    </mu-dialog>
+  </mu-container>
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
-
   export default {
-    name: 'sk-dialog',
+    name: "sk-dialog",
     data() {
       return {
-        isShow: false
-      }
+        isOpenDialog: false,
+        hasAction: false
+      };
     },
+
     props: {
-      title: {
-        type: String
-      },
-      smallTitle: {},
-      titleClass: {
-        type: [String, Array, Object]
-      },
-      open: {type: Boolean, default: false},
-      actionsContainerClass: {
-        type: [String, Array, Object]
-      },
-      scrollable: {
+      show: {
         type: Boolean,
         default: false
       },
+
+      title: {
+        type: String,
+        default: "窗口"
+      },
+
+      isFullscreen: {
+        type: Boolean,
+        default: false
+      },
+
       width: {
-        type: String,
-        default: "auto"
-      },
-      height: {
-        type: String,
-        default: "auto"
+        default: "500px"
       },
 
-      ifCanCtrl: {
-        type: Boolean, default: true //是否可以控制窗口
-      }
+      height: {}
     },
+
     created() {
-      this.isShow = this.open;
+      this.isOpenDialog = this.show;
+      this.hasAction = this.$slots && this.$slots['actions'];
     },
+
     watch: {
-      open: function (v) {
-        this.isShow = !!v;
+      show(v) {
+        this.isOpenDialog = v;
+      },
+
+      isOpenDialog(v) {
+        if (this.show !== v) {
+          this.$emit("update:show", v);
+        }
       }
     },
-    computed: {
-      ...mapGetters({
-        "viewPort": "viewPort"
-      })
-    },
-    updated() {
 
-    },
     methods: {
-      show(ifForce) {
-        if (!this.ifCanCtrl && ifForce !== true) {
-          return;
-        }
-        this.isShow = true;
-        this.$emit("onShow");
-      },
-      hide(ifForce) {
-        if (!this.ifCanCtrl && ifForce !== true) {
-          return;
-        }
-        this.isShow = false;
-        this.$emit("onHide");
+      open() {
+        this.isOpenDialog = true;
       },
 
-      onClickContainer(e) {
-        if (e.target.className.indexOf("sk-win-container") > -1) {
-          this.hide();
-        }
+      close() {
+        this.isOpenDialog = false;
       }
     }
-  }
+  };
 </script>
 
-
-<style lang="scss" scoped>
-  $easeOutFunction: cubic-bezier(0.23, 1, 0.32, 1);
-  .sk-win-content {
+<style scoped lang="scss">
+  .dialog-close{
+    cursor: pointer;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    background-color: #fff;
-    padding: 0px 20px 20px 20px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overflow-x: hidden;
-    transform: scale(1, 1) translate(-50%, -50%);
-    box-shadow: 10px 10px 49px -12px #000;
+    overflow: hidden;
+    right: 0;
+    top: 0;
+    width: 60px;
+    height: 60px;
+    padding-top: 20px;
+    text-align: center;
   }
-
-  .mu-dialog-slide-enter-active .sk-win-content, .mu-dialog-slide-leave-active .sk-win-content {
-    transform: translate(-50%, -50%);
-    transition: all .45s $easeOutFunction;
+  .actions-content{
+    padding: 0 30px;
   }
+</style>
 
-  .mu-dialog-slide-enter .sk-win-content, .mu-dialog-slide-leave-active .sk-win-content {
-    opacity: 0;
-    transform: translate(-50%, -30%);
-  }
-
-  .sk-win-container {
-    z-index: 1000;
-    bottom: 0px;
-    right: 0px;
-    position: fixed;
-    background-color: rgba(0, 0, 0, 0.4);
-    box-shadow: 1px 1px 50px rgba(0, 0, 0, .3);
-    overflow: auto;
-  }
-
-  .close-con {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-  }
-
-  .title-con {
-    padding-top: 10px;
-  }
-
-  .title {
-    font-size: 20px;
-    line-height: 50px;
-  }
-
-  .small-title {
-    font-size: 14px;
-    margin-left: 10px;
-  }
-
-  .body-con {
-    margin-top: 10px;
+<style>
+  .dialog-relative{
+    position: relative;
   }
 </style>

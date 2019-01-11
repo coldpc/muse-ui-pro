@@ -10,7 +10,7 @@
 
     <div class="right-part" :style="isLogin ? {paddingTop: viewPort.top + 'px', marginLeft: viewPort.left + 'px'} : {}">
 
-      <Header  v-if="isLogin" @clickMenu="onClickBarMenu"></Header>
+      <Header v-if="isLogin" @clickMenu="onClickBarMenu"></Header>
       <div class="route-content">
         <router-view />
       </div>

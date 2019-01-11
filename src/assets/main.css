@@ -6,22 +6,38 @@ html, body {
   background-color: #eee !important;
 }
 
-/*.mu-item.is-selected,*/
-/*.mu-slider,*/
-/*.mu-breadcrumbs-item,*/
-/*.mu-radio-checked,*/
-/*.mu-form-item__focus,*/
-/*.mu-checkbox-checked,*/
-/*.mu-switch-checked,*/
-/*.mu-picker,*/
-/*.mu-input__focus,*/
-/*.mu-refresh-control,*/
-/*.mu-app-drawer-header .mu-appbar-title-text:hover,*/
-/*.mu-app-drawer-header .mu-app-version:hover,*/
-/*.mu-bottom-item-active .mu-bottom-item-icon,*/
-/*.mu-bottom-item-active .mu-bottom-item-text {*/
-  /*color: #ec4924;*/
-/*}*/
-/*.mu-timepicker-number.mu-timepicker-number__selected{*/
-  /*background-color: #ec4924;*/
-/*}*/
+/*滚动条样式*/
+*::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 6px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 6px;
+}
+*::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.2);
+}
+*::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0, 0.1);
+  border-radius: 6px;
+  background: rgba(0,0,0,0.05);
+}
+
+.mu-item.is-selected,
+.mu-slider,
+.mu-breadcrumbs-item,
+.mu-radio-checked,
+.mu-form-item__focus,
+.mu-checkbox-checked,
+.mu-switch-checked,
+.mu-picker,
+.mu-input__focus,
+.mu-refresh-control,
+.mu-app-drawer-header .mu-appbar-title-text:hover,
+.mu-app-drawer-header .mu-app-version:hover,
+.mu-bottom-item-active .mu-bottom-item-icon,
+.mu-bottom-item-active .mu-bottom-item-text {
+  color: #ec4924;
+}
+.mu-timepicker-number.mu-timepicker-number__selected{
+  background-color: #ec4924;
+}

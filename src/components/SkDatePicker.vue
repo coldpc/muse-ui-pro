@@ -247,3 +247,13 @@
     }
   }
 </script>
+
+
+<style lang="scss">
+  .sk-date-picker{
+    .mu-icon{
+      zoom: 0.8;
+      color: #999;
+    }
+  }
+</style>
