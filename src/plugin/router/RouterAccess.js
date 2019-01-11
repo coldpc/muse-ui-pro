@@ -1,4 +1,4 @@
-import systemBase from "./lib/systemBase";
+import systemBase from "../../lib/systemBase";
 
 export default class RouterAccess {
 

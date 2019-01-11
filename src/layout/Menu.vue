@@ -26,7 +26,7 @@
 <script>
 
   import { mapGetters } from 'vuex'
-  import {RouterService} from "./plugin/router";
+  import {RouterService} from "../plugin/router/index";
 
   export default {
     data() {

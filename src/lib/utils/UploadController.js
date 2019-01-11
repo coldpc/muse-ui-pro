@@ -48,8 +48,8 @@ export default class UploadController extends EventListener{
   constructor({type, accept, maxFiles, fileSizeLimit}){
     super();
 
-    this.maxFiles = parseInt(maxFiles) || 8;
-    this.fileSizeLimit = fileSizeLimit || 8 * 1024;
+    this.maxFiles = parseInt(maxFiles) || 1;
+    this.fileSizeLimit = (fileSizeLimit || 1) * 1024;
     this.accept = accept || EnFileType[type];
     this.type = type;
   }

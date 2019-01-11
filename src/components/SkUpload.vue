@@ -1,41 +1,23 @@
 <template>
   <div class="attachment-container">
     <div class="prompt-con">
-      <span>{{label}}</span>
-      <span v-if="remark" class="pro-remark">({{remark}})</span>
+      <div class="prompt mu-input-label">{{label}}</div>
     </div>
     <div class="files-part">
       <sk-row>
-
-        <!--上传按钮-->
-        <sk-col>
-          <div class="att-input att-item" v-if="!disabled && files.length < maxFiles">
-            <label class="input-btn" :for="pickerId">
-              <div class="input-icon">
-                <mu-icon color="#aaa" :size="parseInt(width) / 2" value="add"></mu-icon>
-              </div>
-            </label>
-            <input @change="onChangeFile"
-                   style="position:absolute;clip:rect(0 0 0 0);"
-                   :id="`input-file-id-${pickerId}`"
-                   :multiple="maxFiles > 1"
-                   type="file" :accept="uploadController.getAccept()" class="upload-img-input">
-          </div>
-        </sk-col>
-
         <!--图片列表-->
-        <sk-col v-for="fileItem in filesList">
-          <div class="att-item" :class="isImgFile(fileItem) ? 'video-item' : 'img-item'">
+        <div class="item-col" v-for="fileItem in filesList" :key="fileItem.sign">
+          <div class="att-item" :class="isImgFile(fileItem) ? 'video-item' : 'img-item'" :style="{width: itemWidth, height: itemWidth}">
 
             <!--删除按钮-->
-            <div v-if="!disabled" class="img-close-con" @click="removeFile(line, num)">
+            <div v-if="!disabled" class="img-close-con" @click="removeFile(fileItem)">
               <div class="i-con">
-                <mu-icon-button icon="close" :size="10"></mu-icon-button>
+                <mu-icon value="close"></mu-icon>
               </div>
             </div>
 
             <!--图片-->
-            <div v-if="isImgFile(line, num)" class="content img-con">
+            <div v-if="isImgFile(fileItem)" class="content img-con" :style="{backgroundImage: `url(${getSrc(fileItem)})`}">
               <img class="file-img" :src="getSrc(fileItem)" alt="">
             </div>
 
@@ -46,7 +28,23 @@
                 </video>
             </div>
           </div>
-        </sk-col>
+        </div>
+
+        <!--上传按钮-->
+        <div class="item-col">
+          <div class="att-input att-item" v-if="!disabled && filesList.length < maxFiles" v-bind:style="{width: itemWidth, height: itemWidth}">
+            <label class="input-btn" :for="pickerId">
+              <div class="input-icon">
+                <mu-icon color="#aaa" :size="parseInt(itemWidth) / 2" value="add"></mu-icon>
+              </div>
+            </label>
+            <input @change="onChangeFile"
+                   style="position:absolute;clip:rect(0 0 0 0);"
+                   :id="pickerId"
+                   :multiple="maxFiles > 1"
+                   type="file" :accept="uploadController.getAccept()" class="upload-img-input">
+          </div>
+        </div>
 
       </sk-row>
     </div>
@@ -73,7 +71,7 @@
 
     data() {
       return {
-        pickerId: (++ pickerId),
+        pickerId: `input-file-id-${++pickerId}`,
         uploadController: new UploadController({
           type: this.type,
           maxFiles: this.maxFiles,
@@ -91,7 +89,8 @@
     props: {
       maxFiles: {type: Number, default: 1},
       fileSizeLimit: {type: Number, default: 8}, //文件大小 单位M
-      width: {type: String, default: '200px'},
+      itemWidth: {type: String, default: '120px'},
+      type: {type: String, default: 'img'},
       accept: {type: String},
       remark: {type: String}
     },
@@ -113,7 +112,7 @@
       },
 
       isImgFile(fileItem) {
-        return fileItem !== 'video';
+        return fileItem.type !== 'video';
       },
 
       removeFile(fileItem) {
@@ -217,8 +216,13 @@
   }
 
   .file-img {
-    height: 100%;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
   }
 
   .att-item {
@@ -228,11 +232,19 @@
     height: 100%;
     padding: 6px;
     border: 1px dashed #ccc;
+    margin-left: 8px;
+    margin-bottom: 8px;
+
     .img-con {
       width: 100%;
       height: 100%;
       overflow: hidden;
+      position: relative;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
+
   }
 
   .att-item.att-input {
@@ -258,8 +270,8 @@
 
   .img-close-con {
     position: absolute;
-    top: -10px;
-    right: -10px;
+    top: 0px;
+    right: 0px;
     color: #666;
     z-index: 2;
   }
@@ -274,10 +286,13 @@
 
   .attachment-container {
     margin-top: 0px;
+    padding-bottom: 16px;
   }
 
   .prompt-con {
     padding-bottom: 6px;
+    font-size: 16px;
+    color: rgba(0,0,0,.54);
   }
 
   .pro-remark {

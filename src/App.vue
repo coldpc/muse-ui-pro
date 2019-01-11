@@ -20,9 +20,9 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import Menu from './Menu';
-  import Header from './Header';
-  import UserIcon from './UserIcon';
+  import Menu from './layout/Menu';
+  import Header from './layout/Header';
+  import UserIcon from './layout/UserIcon';
 
   export default {
     data() {

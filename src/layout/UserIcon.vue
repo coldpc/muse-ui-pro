@@ -2,7 +2,7 @@
   <div class="account-info-con">
     <div class="profile-element" style="text-align: center;">
       <div class="icon-con">
-        <img alt="image" class="img-circle" src="./assets/default.png">
+        <img alt="image" class="img-circle" src="../assets/default.png">
       </div>
 
       <div class="user-info">

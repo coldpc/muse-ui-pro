@@ -19,10 +19,10 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import HttpClient from "./lib/http/HttpClient";
-  import SystemApi from "./lib/http/SystemApi";
-  import systemBase from "./lib/systemBase";
-  import {EnRoutesConfig, RouterService} from "./plugin/router";
+  import HttpClient from "../lib/http/HttpClient";
+  import SystemApi from "../lib/http/SystemApi";
+  import systemBase from "../lib/systemBase";
+  import {EnRoutesConfig, RouterService} from "../plugin/router/index";
 
   export default {
     data() {

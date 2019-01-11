@@ -2,6 +2,10 @@
   <sk-layout>
     <sk-form :bind="ds">
       <sk-row>
+        <sk-col :span="12">
+          <sk-upload name="tags" label="附件" :max-files="10"></sk-upload>
+        </sk-col>
+
         <sk-col :span="6">
           <sk-date-picker label="开始日期" name="minDate" init-value="2018-09-02" bind-max="maxDate"></sk-date-picker>
         </sk-col>
@@ -32,7 +36,7 @@
         </sk-col>
 
         <sk-col :span="6">
-          <sk-tag name="tags" label="标签" :init-value="[2]"></sk-tag>
+          <sk-tag name="tags" label="标签"></sk-tag>
         </sk-col>
       </sk-row>
     </sk-form>
@@ -127,8 +131,9 @@
       return {
         isOpenDialog: false,
         value1: null,
+
         ds: new DataSet({
-          isAutoCreate: true,
+          isAutoCreate: false,
           isPagination: false,
           isAutoQuery: false,
           queryUrl: "/admin/channel/getDataMonitorList"
@@ -136,13 +141,13 @@
 
         selectOptionDs: new DataSet({
           queryUrl: SystemApi.getProductChild,
-          isAutoQuery: true
+          isAutoQuery: false
         }),
 
         tableDs: new DataSet({
           isPagination: true,
           queryUrl: SystemApi.getChannelList,
-          isAutoQuery: true
+          isAutoQuery: false
         })
       };
     },

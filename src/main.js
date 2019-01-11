@@ -3,15 +3,6 @@ import App from './App';
 import store from './plugin/vuex';
 import router from './plugin/router';
 
-// message插件
-import MuseUIMessage from 'muse-ui-message';
-Vue.use(MuseUIMessage);
-
-// loading插件
-import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
-import MuseUILoading from 'muse-ui-loading';
-Vue.use(MuseUILoading);
-
 Vue.config.productionTip = false;
 
 /*******************引入muse-ui样式*************/
@@ -20,11 +11,14 @@ import './assets/main.css';
 import './assets/iconfont/material-icons.css';
 
 /************引入系统插件***************/
+import './plugin/components';
+
+/************引入系统组件***************/
 import './plugin/skirt';
 
 
 import HttpClient from "./lib/http/HttpClient";
-import RouterAccess from "./RouterAccess";
+import RouterAccess from "./plugin/router/RouterAccess";
 import systemBase from "./lib/systemBase";
 import {UtilsBase} from "./lib/utils/UtilsBase";
 

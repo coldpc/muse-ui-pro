@@ -18,6 +18,7 @@ import SkLayout from "../../components/SkLayout";
 import SkPart from "../../components/SkPart";
 import SkTable from "../../components/SkTable";
 import SkDialog from "../../components/SkDialog";
+import SkUpload from "../../components/SkUpload";
 
 Vue.component(SkButton.name, SkButton);
 Vue.component(SkButtonGroup.name, SkButtonGroup);
@@ -38,3 +39,4 @@ Vue.component(SkTimePicker.name, SkTimePicker);
 Vue.component(SkLayout.name, SkLayout);
 Vue.component(SkPart.name, SkPart);
 Vue.component(SkDialog.name, SkDialog);
+Vue.component(SkUpload.name, SkUpload);

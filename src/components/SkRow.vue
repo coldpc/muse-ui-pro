@@ -1,5 +1,5 @@
 <template>
-  <mu-row gutter tag="div" wrap="wrap"
+  <mu-row :gutter="gutter" tag="div" wrap="wrap"
           :justify-content="justifyContent" :align-items="alignItems" :align-content="alignContent">
     <slot></slot>
   </mu-row>
@@ -33,7 +33,13 @@
       alignContent: {
         type: String,
         default: "start"
+      },
+
+      gutter: {
+        type: Boolean,
+        default: true
       }
+
     },
 
 
