@@ -138,6 +138,10 @@
 
         if (this.binds.record) {
           this.setInitValue();
+        }else if (!UtilsBase.isNull(this.value)){
+          this.setInnerValue(this.value);
+        }else if(!UtilsBase.isNull(this.getInitValue())){
+          this.setInnerValue(this.getInitValue());
         }
       },
 

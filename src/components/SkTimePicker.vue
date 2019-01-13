@@ -3,7 +3,7 @@
 
 <template>
   <div class="sk-time-picker">
-    <mu-date-input :action-icon="actionIcon"
+    <mu-date-input :action-icon="actionIcon" :container="getContainer"
                  type="time" :clock-type="clockType" v-model="innerValue" @change="onChange"
                  :error-text="errorText" :help-text="helpText" :disabled="disabled"
                  :label="label" :label-float="labelFloat" :full-width="fullWidth"></mu-date-input>
@@ -14,6 +14,7 @@
 <script>
   import SkCore from './SkCore';
   import DateApi from "../lib/utils/DateApi";
+  import {UtilsBase} from "../lib/utils/UtilsBase";
 
   export default {
     name: "sk-time-picker",
@@ -22,8 +23,7 @@
     props: {
 
       container: {
-        type: String,
-        default: "dialog" // popover/dialog/bottomSheet
+        type: String // popover/dialog/bottomSheet
       },
 
       viewType: {
@@ -80,6 +80,13 @@
 
     watch: {
 
+    },
+
+    computed: {
+      getContainer() {
+        let client = UtilsBase.getClient();
+        return this.container || ((client.isAndroid || client.isIos) ? 'dialog' : 'popover')
+      }
     },
 
     methods: {

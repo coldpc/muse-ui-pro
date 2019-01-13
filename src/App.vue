@@ -2,10 +2,10 @@
   <div :class="`main-container ${isMini ? 'min-body' : 'common-body'} ${isLogin ? 'auth-body' : 'no-auth-body'}`">
 
     <mu-drawer v-if="isLogin" :open.sync="openLeftPart" :docked="!isMini" :right="false" :width="viewPort.leftMenuWidth">
-      <mu-paper :z-depth="1" class="menu-part-wrap">
+      <div :z-depth="0" class="menu-part-wrap">
         <UserIcon></UserIcon>
         <Menu></Menu>
-      </mu-paper>
+      </div>
     </mu-drawer>
 
     <div class="right-part" :style="isLogin ? {paddingTop: viewPort.top + 'px', marginLeft: viewPort.left + 'px'} : {}">
@@ -77,6 +77,22 @@
   }
 </script>
 
+<style lang="scss">
+  @import "theme/app";
+  .menu-part-wrap{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    background-color: #222;
+    z-index: 200;
+  }
+</style>
+
 <style scoped lang="scss">
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -89,20 +105,5 @@
 
   .right-part{
     transition: margin-left .45s cubic-bezier(.23,1,.32,1);
-  }
-</style>
-
-<style lang="scss">
-  .menu-part-wrap{
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overflow-x: hidden;
-    background-color: #fff;
-    z-index: 200;
   }
 </style>

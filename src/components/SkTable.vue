@@ -86,7 +86,7 @@
             </mu-data-table>
           </div>
 
-          {(this.bind && this.bind.isPagination && this.totalCount > 0) ? <div class="page-part">
+          <div class="page-part">
             <div class="page-num">
               <mu-pagination
                 current={this.pageNum} total={this.totalCount} pageCount={5} pageSize={this.pageSize}
@@ -105,8 +105,8 @@
                 }
               }} options={[10, 20, 50, 100]} />
             </div>
+          </div>
 
-          </div> : null}
         </mu-paper>
       </div>);
 
@@ -150,8 +150,8 @@
           name: '',
           order: 'asc' // asc, desc
         },
-        pageNum: 0,
-        pageSize: 0,
+        pageNum: 1,
+        pageSize: 10,
         totalCount: 0,
 
       }

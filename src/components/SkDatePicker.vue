@@ -104,7 +104,7 @@
     computed: {
       getContainer() {
         let client = UtilsBase.getClient();
-        return this.container || ((client.isAndroid || client.isIos) ? 'bottomSheet' : 'popover')
+        return this.container || ((client.isAndroid || client.isIos) ? 'dialog' : 'popover')
       },
 
       getMaxDate(){

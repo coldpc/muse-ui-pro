@@ -1,17 +1,22 @@
 <template>
   <sk-layout>
+
+    <!--form 加入bind如虎添翼-->
     <sk-form :bind="ds">
       <sk-row>
         <sk-col :span="12">
           <sk-upload name="tags" label="附件" :max-files="10"></sk-upload>
         </sk-col>
 
+        <!--日期组建使用-->
         <sk-col :span="6">
           <sk-date-picker label="开始日期" name="minDate" init-value="2018-09-02" bind-max="maxDate"></sk-date-picker>
         </sk-col>
         <sk-col :span="6">
           <sk-date-picker label="结束日期" name="maxDate" init-value="2018-09-02" bind-min="minDate"></sk-date-picker>
         </sk-col>
+
+        <!--时间组建使用-->
         <sk-col :span="6">
           <sk-time-picker label="时间" name="time" init-value="12:24"></sk-time-picker>
         </sk-col>
@@ -117,8 +122,8 @@
 </template>
 
 <script>
-  import DataSet from "../lib/utils/DataSet";
-  import SystemApi from "../lib/http/SystemApi";
+  import DataSet from "../../lib/utils/DataSet";
+  import SystemApi from "../../lib/http/SystemApi";
 
   export default {
     components: {
@@ -147,7 +152,7 @@
         tableDs: new DataSet({
           isPagination: true,
           queryUrl: SystemApi.getChannelList,
-          isAutoQuery: true
+          isAutoQuery: false
         })
       };
     },

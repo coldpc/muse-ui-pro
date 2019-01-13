@@ -66,17 +66,17 @@
       vertical-align: top;
       text-align: left;
       display: table-cell;
+      color: #eee;
 
       .title {
         width: 160px;
         height: 22px;
         font-size: 16px;
-        color: rgba(34, 34, 34, 1);
         line-height: 22px;
       }
 
       .user {
-        color: #828282;
+        color: #ccc;
         white-space: nowrap;
         cursor: default;
 

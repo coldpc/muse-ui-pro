@@ -83,7 +83,6 @@ class HttpClient {
       if (method === EnHttpMethod.get && data) {
         for (let key in data) {
           params[key] = data[key];
-          data = {};
         }
       }
 

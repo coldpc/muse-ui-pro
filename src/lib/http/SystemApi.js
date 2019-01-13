@@ -1,6 +1,7 @@
 
 const SystemApi = {
   login: "/admin/employee/login",
+  login1: "/api/login/dologin",
   logout: "/admin/employee/logOut",
 
   getProductChild: "/api/product/getProductChild",

@@ -30,7 +30,12 @@ export default class RouterAccess {
   }
 
   afterEach(route) {
-    this.store.dispatch("switchRoute", route.name);
+    let name = route.name;
+    if (name === 'page.home') {
+      name = 'home';
+    }
+
+    this.store.dispatch("switchRoute", name);
     // 新页面滚动到顶部
     window.document.documentElement.scrollTop = window.document.body.scrollTop = 0;
   }

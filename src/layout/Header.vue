@@ -68,7 +68,7 @@
   }
 
   .title{
-    color: #666;
+    color: #333;
     font-size: 18px;
   }
 

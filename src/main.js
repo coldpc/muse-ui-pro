@@ -7,7 +7,6 @@ Vue.config.productionTip = false;
 
 /*******************引入muse-ui样式*************/
 import './plugin/museUi';
-import './assets/main.css';
 import './assets/iconfont/material-icons.css';
 
 /************引入系统插件***************/

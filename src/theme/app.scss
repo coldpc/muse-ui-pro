@@ -1,9 +1,16 @@
+@import "variable";
+
 html, body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #eee !important;
+  background-color: $bodyBack !important;
+}
+
+.scroll-y{
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /*滚动条样式*/
@@ -36,8 +43,12 @@ html, body {
 .mu-app-drawer-header .mu-app-version:hover,
 .mu-bottom-item-active .mu-bottom-item-icon,
 .mu-bottom-item-active .mu-bottom-item-text {
-  color: #ec4924;
+  color: $primaryColor;
 }
 .mu-timepicker-number.mu-timepicker-number__selected{
-  background-color: #ec4924;
+  background-color: $primaryColor;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
