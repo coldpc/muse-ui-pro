@@ -136,13 +136,7 @@
           this.focusClass = defaultFocusClass;
         }
 
-        if (this.binds.record) {
-          this.setInitValue();
-        }else if (!UtilsBase.isNull(this.value)){
-          this.setInnerValue(this.value);
-        }else if(!UtilsBase.isNull(this.getInitValue())){
-          this.setInnerValue(this.getInitValue());
-        }
+        this.setInitValue();
       },
 
       //获取选择每一项的值

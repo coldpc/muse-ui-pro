@@ -247,9 +247,9 @@
           this.setValue(this.value, isInit);
 
           // 如果新建的record并且initValue不为空，采用init value
-        }else if(record.status === Record.statusMap.new && !UtilsBase.isNull(this.getInitValue())) {
+        }else if((!record || record.status === Record.statusMap.new) && !UtilsBase.isNull(this.getInitValue())) {
           this.setValue(this.getInitValue(), isInit);
-        }else {
+        }else if(record){
           let value = record.getValue(this.name);
 
           // 存在值先去设置 不存在就要判断内部是否有值，否则置空

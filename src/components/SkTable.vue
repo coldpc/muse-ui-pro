@@ -86,7 +86,7 @@
             </mu-data-table>
           </div>
 
-          <div class="page-part">
+          {(this.isPagination && this.totalCount > 0) ? (<div class="page-part">
             <div class="page-num">
               <mu-pagination
                 current={this.pageNum} total={this.totalCount} pageCount={5} pageSize={this.pageSize}
@@ -105,7 +105,7 @@
                 }
               }} options={[10, 20, 50, 100]} />
             </div>
-          </div>
+          </div>)  : null}
 
         </mu-paper>
       </div>);
@@ -153,7 +153,7 @@
         pageNum: 1,
         pageSize: 10,
         totalCount: 0,
-
+        isPagination: false
       }
     },
 
@@ -225,6 +225,8 @@
         ds.addEventListener(DataSet.eventTypes.onLoadFailed, this.onLoadFailed);
 
         this.isLoading = ds.isLoading;
+        this.isPagination = ds.isPagination;
+
         if (ds.hasLoadData) {
           this.setRecords(ds.getRecords());
         }
