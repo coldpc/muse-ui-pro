@@ -12,7 +12,11 @@ const SystemApi = {
   getChannelList: "admin/channel/getChannelList",
 
   // 上传文件
-  upload: "/admin/channel/uploadFile"
+  upload: "/admin/channel/uploadFile",
+
+  // parentId: 3
+  getProductParent: "admin/employee/getProductParent",
+  getProductChildByParentId: "/admin/employee/getProductChildByParentId"
 };
 
 export default SystemApi;

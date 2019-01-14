@@ -11,8 +11,21 @@
         <sk-col :span="6">
           <sk-select
             display-field="channelName" value-field="channelCode"
-            name="channelCode" label="类型"
+            name="channelCode" label="渠道编码"
             :option-bind="channelDs"></sk-select>
+        </sk-col>
+
+        <sk-col :span="6">
+          <sk-select
+            display-field="productParentName" value-field="id"
+            name="parentId" label="父类"
+            :option-bind="parentDs"></sk-select>
+        </sk-col>
+
+        <sk-col :span="6">
+          <sk-select
+            display-field="productChildName" value-field="id" name="childId" label="子类"
+            :option-bind="childDs"></sk-select>
         </sk-col>
 
         <sk-col :span="6">
@@ -22,8 +35,6 @@
           </sk-button-group>
         </sk-col>
       </sk-row>
-
-
     </sk-form>
 
     <sk-table :bind="tableDs" :selectable="false">
@@ -66,6 +77,17 @@
           queryUrl: SystemApi.getDataMonitorList,
           isAutoQuery: true,
           queryBind: queryDs
+        }),
+
+        parentDs: new DataSet({
+          isAutoQuery: true,
+          queryUrl: SystemApi.getProductParent
+        }),
+
+        childDs: new DataSet({
+          bindParent: queryDs,
+          bindField: 'parentId',
+          queryUrl: SystemApi.getProductChildByParentId
         })
       };
     },

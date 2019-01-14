@@ -49,6 +49,11 @@ export default class DataSet extends EventListener {
 
   records = [];
 
+  bindParent = null;
+  bindParentRecord = null;
+  bindField = '';
+  bindParaKey = '';
+
   /**
    * 构造函数
    * @param queryUrl 查询的url地址
@@ -62,10 +67,14 @@ export default class DataSet extends EventListener {
    * @param pageSize 每一页数据条数 默认10
    * @param dataSource 数据源头
    * @param masker 遮罩 {info: '', dom}
+   * @param bindParent 绑定父级的ds
+   * @param bindField 绑定的字段
+   * @param bindParaKey 查询的参数
    */
   constructor({queryUrl, queryBind, queryPara, parseData, parseQueryPara,
                 isAutoQuery, isPagination = false, isAutoCreate,
-                pageSize = 10, dataSource, masker = null}) {
+                pageSize = 10, dataSource, masker = null,
+                bindParent = null, bindField = '', bindParaKey = ''}) {
     super();
 
     this.parseQueryPara = parseQueryPara;
@@ -83,6 +92,79 @@ export default class DataSet extends EventListener {
       this.query().catch();
     } else if (!!isAutoCreate) {
       this.add();
+    }
+
+    if (bindParent) {
+      this.setBindDs(bindParent, bindField, bindParaKey);
+    }
+  }
+
+  //设置绑定的父级ds
+  setBindDs(ds, field, paraKey){
+    let old = this.bindParent;
+    if (old) {
+      old.removeEventListener(DataSet.eventTypes.onIndexChange, this.onParentIndexChange);
+    }
+    ds.addEventListener(DataSet.eventTypes.onIndexChange, this.onParentIndexChange);
+
+    //设置值
+    this.bindParaKey = paraKey || field;
+    this.bindField = field;
+    this.bindParent = ds;
+
+    // 初始化值
+    if (ds.currentRecord) {
+      this.setBindRecord(ds.currentRecord);
+    }
+  }
+
+  setBindRecord(record) {
+    let old = this.bindParentRecord;
+    if (old) {
+      old.removeEventListener(Record.eventTypes.onUpdate, this.onUpdateParent);
+      old.removeEventListener(Record.eventTypes.onReset, this.onLoadParent);
+      old.removeEventListener(Record.eventTypes.onLoad, this.onLoadParent);
+    }
+
+    // 绑定新的record
+    this.bindParentRecord = record;
+    record.addEventListener(Record.eventTypes.onUpdate, this.onUpdateParent);
+    record.addEventListener(Record.eventTypes.onReset, this.onLoadParent);
+    record.addEventListener(Record.eventTypes.onLoad, this.onLoadParent);
+
+    // 初始化值
+    this.onLoadParent();
+  }
+
+  /**
+   *
+   * 这是绑定的ds的事件回调
+   * @param value
+   * @param key
+   *
+   */
+  onUpdateParent = (value, key) => {
+    if (key === this.bindField){
+      this.queryParentPara(value);
+    }
+  };
+
+  onLoadParent = () => {
+    let value = this.bindParentRecord.getValue(this.bindField);
+    this.queryParentPara(value);
+  };
+
+  onParentIndexChange = (record) => {
+    this.setBindRecord(record);
+  };
+
+  queryParentPara(value) {
+    let para = this.queryPara || {};
+    if (!UtilsBase.isNull(value)){
+      para[this.bindParaKey] = value;
+      this.query(para).catch();
+    }else{
+      this.setData();
     }
   }
 
@@ -211,8 +293,8 @@ export default class DataSet extends EventListener {
    * @param record
    * @param origin 触发变更来源
    */
-  onRecordUpdate = (value, key, record, origin) => {
-    this.dispatch(DataSet.eventTypes.onUpdate, ...arguments);
+  onRecordUpdate = (...args) => {
+    this.dispatch(DataSet.eventTypes.onUpdate, ...args);
   };
 
   //新增

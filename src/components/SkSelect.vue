@@ -11,6 +11,9 @@
     <div class="mask" v-if="!hasLoadOption">
       <p class="disabled-info">没有选项</p>
     </div>
+    <div class="mask hint-text" v-else-if="!innerValue && innerValue !== 0">
+      <p class="disabled-info">请选择</p>
+    </div>
   </div>
 </template>
 
@@ -221,6 +224,10 @@
       bottom: 0px;
       z-index: 2;
       color: #ccc;
+
+      &.hint-text{
+        pointer-events: none;
+      }
     }
 
     .disabled-info {

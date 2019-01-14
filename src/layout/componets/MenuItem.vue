@@ -19,7 +19,6 @@
     name: 'menu-item',
 
     data() {
-      console.log(this.menuModel);
       return {
         isRotate: this.isUnfold
       }
