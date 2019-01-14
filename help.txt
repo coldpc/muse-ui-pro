@@ -1,1 +1,11 @@
-cnpm install sass-loader node-sass vue-style-loader --D
+cnpm install 安装
+
+组件使用特别注意参数
+
+修改接口返回数据格式请使用
+HttpClient.setResponseDataFormat
+
+
+生成路由
+node ./build/GenerateRouter
+

@@ -5,7 +5,7 @@ const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
 // 生成路由
-require("./vueRouterPath");
+// require("./vueRouterPath");
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)

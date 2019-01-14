@@ -1,3 +1,8 @@
+/**
+ * 自动生成路由代码
+ * 千万不要更改template代码，可能导致出问题
+ */
+
 let path = require('path');
 let fs = require("fs");
 let iconv = require('iconv-lite');
