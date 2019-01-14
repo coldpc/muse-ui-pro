@@ -31,7 +31,7 @@
         </div>
 
         <!--上传按钮-->
-        <div class="item-col">
+        <div v-if="filesList.length < maxFiles" class="item-col">
           <div class="att-input att-item" v-if="!disabled && filesList.length < maxFiles" v-bind:style="{width: itemWidth, height: itemWidth}">
             <label class="input-btn" :for="pickerId">
               <div class="input-icon">
@@ -135,13 +135,20 @@
         if (!UtilsBase.checkIsEqual(this.innerValue, value)) {
           this.innerValue = value;
         }
-        this.resetUploadController(value);
+
+        let valueLength = value instanceof Array ? value.length : 1;
+        if (!(value && this.filesList && this.filesList.length === valueLength)) {
+          this.resetUploadController(value);
+        }
       },
 
       resetUploadController(value) {
         let files = typeof value === 'string' ? [value] : value;
         this.uploadController.clearFiles();
-        this.uploadController.addRemoteFiles(files);
+
+        if (value) {
+          this.uploadController.addRemoteFiles(files);
+        }
       },
 
       setViewFiles(filesList) {

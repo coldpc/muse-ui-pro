@@ -295,7 +295,7 @@
 
 <style lang="scss" scoped>
   .page-part{
-    padding: 20px;
+    padding: 20px 5px;
   }
   .page-num, .page-options{
     display: inline-block;
@@ -340,6 +340,9 @@
       }
       .mu-text-field-input:focus{
         box-shadow: none;
+      }
+      .disabled-info{
+        display: none;
       }
     }
     .mu-text-field-input:focus {

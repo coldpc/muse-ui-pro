@@ -32,6 +32,8 @@
 <style lang="scss">
   .sk-button-group[bts-group-1987]{
     white-space: nowrap;
+    padding: 20px 0;
+
     .mu-button + .mu-button{
       margin-left: 15px;
     }

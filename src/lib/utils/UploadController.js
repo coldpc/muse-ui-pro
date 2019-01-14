@@ -1,6 +1,7 @@
 import EventListener from "./EventListener";
-import HttpClient from "../http/HttpClient";
+import HttpClient, {EnContentType} from "../http/HttpClient";
 import ArrayApi from "./ArrayApi";
+import SystemApi from "../http/SystemApi";
 
 const prefix = "file-item-";
 
@@ -89,7 +90,7 @@ export default class UploadController extends EventListener{
    */
   checkFile(file){
     let num = this.getFilesList().length, errorMessage;
-    if (this.maxFiles !== 1 && num + 1 >= this.maxFiles){
+    if (this.maxFiles !== 1 && num + 1 > this.maxFiles){
       errorMessage = EnErrorMessage.outNumber;
     }
 
@@ -214,7 +215,7 @@ export default class UploadController extends EventListener{
       }
     }
 
-    if (!isComplete) {
+    if (isComplete) {
       this.dispatch(UploadController.eventTypes.onCompleteUpload, this.getFilesList());
     }
   }
@@ -232,6 +233,8 @@ export default class UploadController extends EventListener{
 
     try{
       res = await HttpClient.request({
+        contentType: EnContentType.file,
+        url: SystemApi.upload,
         data: formData,
         onUploadProgress: (progressEvent) => {
           this.dispatch(UploadController.eventTypes.onProgress, progressEvent, fileItem);

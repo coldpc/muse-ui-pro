@@ -1,6 +1,6 @@
 <template>
   <mu-button :color="color"
-          @click="$emit('click')"
+          @click="onClick"
           :ripple="ripple"
           :fab="fab"
           :flat="flat"
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+  import DataSet from "../lib/utils/DataSet";
+
   export default {
     name: 'sk-button',
 
@@ -93,18 +95,37 @@
 
       replace: {
         type: Boolean
+      },
+
+      bind: {
+        type: DataSet
+      },
+
+      action: {
+        type: String // query|reset|add
       }
     },
 
 
     data() {
       return {
-
+        ds: this.bind
       };
     },
 
-    methods: {
+    watch: {
+      bind(ds) {
+        this.ds = ds;
+      }
+    },
 
+    methods: {
+      onClick() {
+        this.$emit('click');
+        if (this.action && this.ds) {
+          this.ds.doAction(this.action);
+        }
+      }
     }
   }
 </script>

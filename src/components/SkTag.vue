@@ -1,7 +1,7 @@
 <template>
   <div class="sk-tag-con">
     <mu-select :max-height="maxHeight" @change="onChange" chips multiple tags
-               v-model="innerValue" action-icon="dns"
+               v-model="innerValue" action-icon="add"
                :error-text="errorText" :help-text="helpText" :disabled="disabled"
                :label="label" :label-float="labelFloat" :full-width="fullWidth" >
     </mu-select>

@@ -5,7 +5,12 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: $bodyBack !important;
+  background-color: #fff !important;
+
+  .mu-pagination-item.mu-button.is-current {
+    background-color: $primaryColor;
+    color: #fff;
+  }
 }
 
 .scroll-y{
