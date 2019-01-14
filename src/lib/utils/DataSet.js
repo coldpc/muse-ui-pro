@@ -99,7 +99,22 @@ export default class DataSet extends EventListener {
     }
   }
 
-  //设置绑定的父级ds
+  /**
+   * 设置绑定父级的ds
+   * 分为三种情况 需要重新刷新数据
+   * 1 父的值为空
+   * 2 父的数据加载 indexChange
+   * 3 record的绑定 record分为reset load update 这些都需要重新计算查询的条件，并且重新查询
+   * @param ds 绑定的ds
+   * @param field 绑定的字段
+   *
+   * @param paraKey 绑定的值查询的条件key
+   * 例如：父类的数据
+   * [{id: 1}],
+   * field = id, paraKey = 'parentId'
+   *
+   * 则查询的条件为 {parentId: 1}，如果不穿paraKey则为 {id: 1}
+   */
   setBindDs(ds, field, paraKey){
     let old = this.bindParent;
     if (old) {
@@ -118,22 +133,23 @@ export default class DataSet extends EventListener {
     }
   }
 
+  // 设置绑定的record
   setBindRecord(record) {
     let old = this.bindParentRecord;
     if (old) {
-      old.removeEventListener(Record.eventTypes.onUpdate, this.onUpdateParent);
-      old.removeEventListener(Record.eventTypes.onReset, this.onLoadParent);
-      old.removeEventListener(Record.eventTypes.onLoad, this.onLoadParent);
+      old.removeEventListener(Record.eventTypes.onUpdate, this.onUpdateParentRecord);
+      old.removeEventListener(Record.eventTypes.onReset, this.onLoadParentRecord);
+      old.removeEventListener(Record.eventTypes.onLoad, this.onLoadParentRecord);
     }
 
     // 绑定新的record
     this.bindParentRecord = record;
-    record.addEventListener(Record.eventTypes.onUpdate, this.onUpdateParent);
-    record.addEventListener(Record.eventTypes.onReset, this.onLoadParent);
-    record.addEventListener(Record.eventTypes.onLoad, this.onLoadParent);
+    record.addEventListener(Record.eventTypes.onUpdate, this.onUpdateParentRecord);
+    record.addEventListener(Record.eventTypes.onReset, this.onLoadParentRecord);
+    record.addEventListener(Record.eventTypes.onLoad, this.onLoadParentRecord);
 
     // 初始化值
-    this.onLoadParent();
+    this.onLoadParentRecord();
   }
 
   /**
@@ -141,27 +157,37 @@ export default class DataSet extends EventListener {
    * 这是绑定的ds的事件回调
    * @param value
    * @param key
-   *
    */
-  onUpdateParent = (value, key) => {
+  onUpdateParentRecord = (value, key) => {
     if (key === this.bindField){
-      this.queryParentPara(value);
+      this.queryByBindPara(value, this.bindParaKey);
     }
   };
 
-  onLoadParent = () => {
+  /**
+   * 防止重新加载数据的时候未更新
+   */
+  onLoadParentRecord = () => {
     let value = this.bindParentRecord.getValue(this.bindField);
-    this.queryParentPara(value);
+    this.queryByBindPara(value, this.bindParaKey);
   };
 
+  /**
+   * 绑定的ds的currentRecord发生改变，则需要重新绑定新的record
+   * @param record
+   */
   onParentIndexChange = (record) => {
     this.setBindRecord(record);
   };
 
-  queryParentPara(value) {
+  /**
+   *
+   * @param value
+   */
+  queryByBindPara(value, key) {
     let para = this.queryPara || {};
     if (!UtilsBase.isNull(value)){
-      para[this.bindParaKey] = value;
+      para[key] = value;
       this.query(para).catch();
     }else{
       this.setData();
